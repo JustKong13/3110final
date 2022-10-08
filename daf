@@ -1,0 +1,123 @@
+DUNE(1)                           Dune Manual                          DUNE(1)
+
+
+
+NNAAMMEE
+       dune - composable build system for OCaml
+
+SSYYNNOOPPSSIISS
+       dduunnee bbuuiilldd [[----wwaattcchh]]
+       dduunnee rruunntteesstt [[----wwaattcchh]]
+       dduunnee eexxeecc NNAAMMEE
+       dduunnee uuttoopp [[DDIIRR]]
+       dduunnee iinnssttaallll
+       dduunnee iinniitt pprroojjeecctt NNAAMMEE [[PPAATTHH]] [[----lliibbss==ll11,,ll22 ----ppppxx==pp11,,pp22 ----iinnlliinnee--tteessttss]]
+
+DDEESSCCRRIIPPTTIIOONN
+       Dune is a build system designed for OCaml projects only. It focuses on
+       providing the user with a consistent experience and takes care of most
+       of the low-level details of OCaml compilation. All you have to do is
+       provide a description of your project and Dune will do the rest.
+
+       The scheme it implements is inspired from the one used inside Jane
+       Street and adapted to the open source world. It has matured over a long
+       time and is used daily by hundreds of developers, which means that it
+       is highly tested and productive.
+
+CCOOMMMMAANNDDSS
+       bbuuiilldd
+           Build the given targets, or all installable targets if none are
+           given.
+
+       ccaacchhee
+           Manage the shared cache of build artifacts
+
+       cclleeaann
+           Clean the project.
+
+       ccooqq Command group related to Coq.
+
+       ddeessccrriibbee
+           Describe the workspace.
+
+       ddiiaaggnnoossttiiccss
+           fetch and return errors from the current build
+
+       eexxeecc
+           Execute a command in a similar environment as if installation was
+           performed.
+
+       eexxtteerrnnaall--lliibb--ddeeppss
+           Removed command.
+
+       ffmmtt Format source code.
+
+       ffoorrmmaatt--dduunnee--ffiillee
+           Format dune files
+
+       hheellpp
+           Additional Dune help
+
+       iinniitt
+           Initialize dune components
+
+       iinnssttaallll
+           Install packages.
+
+       iinnssttaalllleedd--lliibbrraarriieess
+           Print out libraries installed on the system.
+
+       iinntteerrnnaall
+
+
+       ooccaammll
+
+
+       ooccaammll--mmeerrlliinn
+           Start a merlin configuration server
+
+       pprriinntteennvv
+           Print the environment of a directory
+
+       pprroommoottee
+           Promote files from the last run
+
+       rrppcc Dune's RPC mechanism. Experimental.
+
+       rruulleess
+           Dump internal rules.
+
+       rruunntteesstt
+           Run tests.
+
+       sshhuuttddoowwnn
+           cancel and shutdown any builds in the current workspace
+
+       ssuubbsstt
+           Substitute watermarks in source files.
+
+       ttoopp Print a list of toplevel directives for including directories and
+           loading cma files.
+
+       uunniinnssttaallll
+           Uninstall packages.
+
+       uuppggrraaddee
+           Upgrade jbuilder projects to dune
+
+       uuttoopp
+           Load library in utop
+
+CCOOMMMMAANNDD AALLIIAASSEESS
+       tteesstt
+           An alias for rruunntteesstt.
+
+OOPPTTIIOONNSS
+       ----aaccttiioonn--ssttddeerrrr--oonn--ssuucccceessss=_V_A_L
+           Same as ----aaccttiioonn--ssttddoouutt--oonn--ssuucccceessss but for the standard output for
+           error messages. A good default for large mono-repositories is
+           ----aaccttiioonn--ssttddoouutt--oonn--ssuucccceessss==sswwaallllooww
+           ----aaccttiioonn--ssttddeerrrr--oonn--ssuucccceessss==mmuusstt--bbee--eemmppttyy. This ensures that a
+           successful build has a "clean" empty output.
+
+       ----aa
