@@ -1,1 +1,1 @@
-let available_strs = ["a";"b";"c"]
+let available_strs = [ "a"; "b"; "c" ]
