@@ -1,9 +1,9 @@
-# dune exec ./test/main.exe
+# dune build
 # OCAMLPARAM: unset
 # Shared cache: disabled
-# Workspace root: /mnt/c/Users/justi/projects/3110final
-# Auto-detected concurrency: 8
-$ /home/justkong13/.opam/cs3110-2022fa/bin/ocamlc.opt -config > /tmp/dune_134121_output
+# Workspace root: /home/jqd3/3110final
+# Auto-detected concurrency: 12
+$ /home/jqd3/.opam/cs3110-2022fa/bin/ocamlc.opt -config > /tmp/dune_d4352f_output
 # Dune context:
 #  { name = "default"
 #  ; kind = "default"
@@ -13,42 +13,34 @@ $ /home/justkong13/.opam/cs3110-2022fa/bin/ocamlc.opt -config > /tmp/dune_134121
 #  ; fdo_target_exe = None
 #  ; build_dir = "default"
 #  ; toplevel_path =
-#      Some External "/home/justkong13/.opam/cs3110-2022fa/lib/toplevel"
-#  ; ocaml_bin = External "/home/justkong13/.opam/cs3110-2022fa/bin"
-#  ; ocaml = Ok External "/home/justkong13/.opam/cs3110-2022fa/bin/ocaml"
-#  ; ocamlc = External "/home/justkong13/.opam/cs3110-2022fa/bin/ocamlc.opt"
-#  ; ocamlopt =
-#      Ok External "/home/justkong13/.opam/cs3110-2022fa/bin/ocamlopt.opt"
-#  ; ocamldep =
-#      Ok External "/home/justkong13/.opam/cs3110-2022fa/bin/ocamldep.opt"
+#      Some External "/home/jqd3/.opam/cs3110-2022fa/lib/toplevel"
+#  ; ocaml_bin = External "/home/jqd3/.opam/cs3110-2022fa/bin"
+#  ; ocaml = Ok External "/home/jqd3/.opam/cs3110-2022fa/bin/ocaml"
+#  ; ocamlc = External "/home/jqd3/.opam/cs3110-2022fa/bin/ocamlc.opt"
+#  ; ocamlopt = Ok External "/home/jqd3/.opam/cs3110-2022fa/bin/ocamlopt.opt"
+#  ; ocamldep = Ok External "/home/jqd3/.opam/cs3110-2022fa/bin/ocamldep.opt"
 #  ; ocamlmklib =
-#      Ok External "/home/justkong13/.opam/cs3110-2022fa/bin/ocamlmklib.opt"
+#      Ok External "/home/jqd3/.opam/cs3110-2022fa/bin/ocamlmklib.opt"
 #  ; env =
 #      map
-#        { "DUNE_OCAML_HARDCODED" : "/home/justkong13/.opam/cs3110-2022fa/lib"
-#        ; "DUNE_OCAML_STDLIB" :
-#            "/home/justkong13/.opam/cs3110-2022fa/lib/ocaml"
-#        ; "DUNE_SOURCEROOT" : "/mnt/c/Users/justi/projects/3110final"
-#        ; "INSIDE_DUNE" :
-#            "/mnt/c/Users/justi/projects/3110final/_build/default"
+#        { "DUNE_OCAML_HARDCODED" : "/home/jqd3/.opam/cs3110-2022fa/lib"
+#        ; "DUNE_OCAML_STDLIB" : "/home/jqd3/.opam/cs3110-2022fa/lib/ocaml"
+#        ; "DUNE_SOURCEROOT" : "/home/jqd3/3110final"
+#        ; "INSIDE_DUNE" : "/home/jqd3/3110final/_build/default"
 #        ; "OCAMLFIND_IGNORE_DUPS_IN" :
-#            "/mnt/c/Users/justi/projects/3110final/_build/install/default/lib"
-#        ; "OCAMLPATH" :
-#            "/mnt/c/Users/justi/projects/3110final/_build/install/default/lib"
+#            "/home/jqd3/3110final/_build/install/default/lib"
+#        ; "OCAMLPATH" : "/home/jqd3/3110final/_build/install/default/lib"
 #        ; "OCAMLTOP_INCLUDE_PATH" :
-#            "/mnt/c/Users/justi/projects/3110final/_build/install/default/lib/toplevel"
-#        ; "OCAML_COLOR" : "always"
-#        ; "OPAMCOLOR" : "always"
+#            "/home/jqd3/3110final/_build/install/default/lib/toplevel"
 #        }
-#  ; findlib_paths = [ External "/home/justkong13/.opam/cs3110-2022fa/lib" ]
+#  ; findlib_paths = [ External "/home/jqd3/.opam/cs3110-2022fa/lib" ]
 #  ; arch_sixtyfour = true
 #  ; natdynlink_supported = true
 #  ; supports_shared_libraries = true
 #  ; ocaml_config =
 #      { version = "4.14.0"
-#      ; standard_library_default =
-#          "/home/justkong13/.opam/cs3110-2022fa/lib/ocaml"
-#      ; standard_library = "/home/justkong13/.opam/cs3110-2022fa/lib/ocaml"
+#      ; standard_library_default = "/home/jqd3/.opam/cs3110-2022fa/lib/ocaml"
+#      ; standard_library = "/home/jqd3/.opam/cs3110-2022fa/lib/ocaml"
 #      ; standard_runtime = "the_standard_runtime_variable_was_deleted"
 #      ; ccomp_type = "cc"
 #      ; c_compiler = "gcc"
@@ -117,9 +109,18 @@ $ /home/justkong13/.opam/cs3110-2022fa/bin/ocamlc.opt -config > /tmp/dune_134121
 #      ; windows_unicode = false
 #      }
 #  }
-$ (cd _build/default && /home/justkong13/.opam/cs3110-2022fa/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -bin-annot -I src/.wordbite.objs/byte -no-alias-deps -opaque -o src/.wordbite.objs/byte/wordbite.cmi -c -intf src/wordbite.mli)
-$ (cd _build/default && /home/justkong13/.opam/cs3110-2022fa/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -bin-annot -I test/.main.eobjs/byte -I /home/justkong13/.opam/cs3110-2022fa/lib/ounit2 -I /home/justkong13/.opam/cs3110-2022fa/lib/ounit2/advanced -I /home/justkong13/.opam/cs3110-2022fa/lib/seq -I /home/justkong13/.opam/cs3110-2022fa/lib/stdlib-shims -I src/.wordbite.objs/byte -no-alias-deps -opaque -o test/.main.eobjs/byte/dune__exe__Main.cmi -c -intf test/main.mli)
-$ (cd _build/default && /home/justkong13/.opam/cs3110-2022fa/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -I src/.wordbite.objs/byte -I src/.wordbite.objs/native -intf-suffix .ml -no-alias-deps -opaque -o src/.wordbite.objs/native/wordbite.cmx -c -impl src/wordbite.ml)
-$ (cd _build/default && /home/justkong13/.opam/cs3110-2022fa/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -I test/.main.eobjs/byte -I test/.main.eobjs/native -I /home/justkong13/.opam/cs3110-2022fa/lib/ounit2 -I /home/justkong13/.opam/cs3110-2022fa/lib/ounit2/advanced -I /home/justkong13/.opam/cs3110-2022fa/lib/seq -I /home/justkong13/.opam/cs3110-2022fa/lib/stdlib-shims -I src/.wordbite.objs/byte -I src/.wordbite.objs/native -intf-suffix .ml -no-alias-deps -opaque -o test/.main.eobjs/native/dune__exe__Main.cmx -c -impl test/main.ml)
-$ (cd _build/default && /home/justkong13/.opam/cs3110-2022fa/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -a -o src/wordbite.cmxa src/.wordbite.objs/native/wordbite.cmx)
-$ (cd _build/default && /home/justkong13/.opam/cs3110-2022fa/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -o test/main.exe src/wordbite.cmxa /home/justkong13/.opam/cs3110-2022fa/lib/ocaml/unix.cmxa -I /home/justkong13/.opam/cs3110-2022fa/lib/ocaml -I /home/justkong13/.opam/cs3110-2022fa/lib/ocaml /home/justkong13/.opam/cs3110-2022fa/lib/stdlib-shims/stdlib_shims.cmxa /home/justkong13/.opam/cs3110-2022fa/lib/ounit2/advanced/oUnitAdvanced.cmxa /home/justkong13/.opam/cs3110-2022fa/lib/ounit2/oUnit.cmxa test/.main.eobjs/native/dune__exe__Main.cmx)
+$ (cd _build/default && /home/jqd3/.opam/cs3110-2022fa/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -bin-annot -I src/.wordbite.objs/byte -no-alias-deps -opaque -o src/.wordbite.objs/byte/wordbite.cmi -c -intf src/wordbite.mli)
+$ (cd _build/default && /home/jqd3/.opam/cs3110-2022fa/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -bin-annot -I src/.wordbite.objs/byte -intf-suffix .ml -no-alias-deps -opaque -o src/.wordbite.objs/byte/wordbite.cmo -c -impl src/wordbite.ml)
+> File "src/wordbite.ml", line 1:
+> Error: The implementation src/wordbite.ml
+>        does not match the interface src/.wordbite.objs/byte/wordbite.cmi: 
+>        The type `t' is required but not provided
+>        File "src/wordbite.mli", line 1, characters 0-6: Expected declaration
+[2]
+$ (cd _build/default && /home/jqd3/.opam/cs3110-2022fa/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -I src/.wordbite.objs/byte -I src/.wordbite.objs/native -intf-suffix .ml -no-alias-deps -opaque -o src/.wordbite.objs/native/wordbite.cmx -c -impl src/wordbite.ml)
+> File "src/wordbite.ml", line 1:
+> Error: The implementation src/wordbite.ml
+>        does not match the interface src/.wordbite.objs/byte/wordbite.cmi: 
+>        The type `t' is required but not provided
+>        File "src/wordbite.mli", line 1, characters 0-6: Expected declaration
+[2]
