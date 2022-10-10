@@ -1,0 +1,6 @@
+description = ""
+requires = ""
+archive(byte) = "wordbite.cma"
+archive(native) = "wordbite.cmxa"
+plugin(byte) = "wordbite.cma"
+plugin(native) = "wordbite.cmxs"

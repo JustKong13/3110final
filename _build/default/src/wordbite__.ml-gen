@@ -1,0 +1,2 @@
+(** @canonical Wordbite.Wordvalidator *)
+module Wordvalidator = Wordbite__Wordvalidator

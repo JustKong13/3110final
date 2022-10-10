@@ -1,1 +1,3 @@
-let available_strs = ["a";"b";"c"]
+open Wordvalidator
+
+let available_strs = [ "a"; "b"; "c" ]

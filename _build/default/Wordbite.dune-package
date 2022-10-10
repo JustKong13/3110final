@@ -1,0 +1,54 @@
+(lang dune 3.4)
+(name Wordbite)
+(sections (lib .) (libexec .) (doc ../../doc/Wordbite))
+(files
+ (lib
+  (META
+   dune-package
+   opam
+   wordbite.a
+   wordbite.cma
+   wordbite.cmi
+   wordbite.cmt
+   wordbite.cmti
+   wordbite.cmx
+   wordbite.cmxa
+   wordbite.ml
+   wordbite.mli
+   wordbite__.cmi
+   wordbite__.cmt
+   wordbite__.cmx
+   wordbite__.ml
+   wordbite__Wordvalidator.cmi
+   wordbite__Wordvalidator.cmt
+   wordbite__Wordvalidator.cmti
+   wordbite__Wordvalidator.cmx
+   wordvalidator.ml
+   wordvalidator.mli))
+ (libexec (wordbite.cmxs))
+ (doc (LICENSE README.md)))
+(library
+ (name Wordbite)
+ (kind normal)
+ (archives (byte wordbite.cma) (native wordbite.cmxa))
+ (plugins (byte wordbite.cma) (native wordbite.cmxs))
+ (native_archives wordbite.a)
+ (main_module_name Wordbite)
+ (modes byte native)
+ (modules
+  (wrapped
+   (main_module_name Wordbite)
+   (modules
+    ((name Wordbite) (obj_name wordbite) (visibility public) (impl) (intf))
+    ((name Wordvalidator)
+     (obj_name wordbite__Wordvalidator)
+     (visibility public)
+     (impl)
+     (intf)))
+   (alias_module
+    (name Wordbite__)
+    (obj_name wordbite__)
+    (visibility public)
+    (kind alias)
+    (impl))
+   (wrapped true))))
