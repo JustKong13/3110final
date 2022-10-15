@@ -13,7 +13,7 @@ let play_game s = raise (Failure "Unimplemented: Main.play_game")
 (** [main ()] prompts for the game to play, then starts it. *)
 let main () =
   ANSITerminal.print_string [ ANSITerminal.cyan ] "\n\nWelcome to Wordbite!.\n";
-  print_endline "Please type start.\n";
+  print_endline "Please type [start] to start the game.\n";
   print_string "> ";
   match read_line () with
   | exception End_of_file -> ()
