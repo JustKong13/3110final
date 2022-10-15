@@ -20,8 +20,8 @@ let available_strs_aux a_string =
     let second_letter = get_letter new_alphabet_string in
     first_letter ^ second_letter
 
-let rec available_strs alphabet_string accumulated_lst =
+let rec available_strs a_string accumulated_lst =
   if List.length accumulated_lst < 10 then
-    let new_str = available_strs_aux alphabet_string in
-    available_strs alphabet_string (new_str :: accumulated_lst)
+    let new_str = available_strs_aux a_string in
+    available_strs a_string (new_str :: accumulated_lst)
   else accumulated_lst

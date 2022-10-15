@@ -1,2 +1,4 @@
 (library
- (name wordbite))
+ (name wordbite)
+ (public_name Wordbite)
+ (libraries ANSITerminal))

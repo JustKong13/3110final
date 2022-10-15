@@ -1,4 +1,4 @@
-(** IN ORDER TO RUN TESTS, YOU MUST DO [dune.exec ./test/main.exe] IN THE 
+(** IN ORDER TO RUN TESTS, YOU MUST DO [dune.exec ./test/main.exe] IN THE
     TERMINAL*)
 
 open OUnit2
