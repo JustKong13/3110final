@@ -6,19 +6,18 @@ type game = {
 
 let alphabet_double_vowels = "aabcdeefghiijklmnoopqrstuuvwxyz"
 
-let available_strs_aux alphabet_string =
+let get_letter a_string =
+  String.make 1 (String.get a_string (Random.int (String.length a_string)))
+
+let available_strs_aux a_string =
   let size = Random.int 2 in
-  if size = 0 then String.make 1 (String.get alphabet_string (Random.int 32))
+  if size = 0 then get_letter a_string
   else
-    let first_letter =
-      String.make 1 (String.get alphabet_string (Random.int 32))
-    in
+    let first_letter = get_letter a_string in
     let new_alphabet_string =
-      Str.global_replace (Str.regexp first_letter) "" alphabet_string
+      Str.global_replace (Str.regexp first_letter) "" a_string
     in
-    let second_letter =
-      String.make 1 (String.get new_alphabet_string (Random.int 32))
-    in
+    let second_letter = get_letter new_alphabet_string in
     first_letter ^ second_letter
 
 let rec available_strs alphabet_string accumulated_lst =
