@@ -1,7 +1,7 @@
-(** This file only has one method available to use, [check_word] which checks if
-    your word is a valid word*)
+(** This file only has one method available to use, [check word], which checks
+    if your word is a valid word*)
 
-let valid_words : string list =
+let valid_words =
   let ic = open_in "./src/words.txt" in
   let try_read () = try Some (input_line ic) with End_of_file -> None in
   let rec loop acc =

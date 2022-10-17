@@ -6,19 +6,17 @@ type game = {
 
 let alphabet_double_vowels = "aabcdeefghiijklmnoopqrstuuvwxyz"
 
-let file_to_list filename =
-  let ic = open_in filename and l = ref [] in
-  let rec loop () =
-    let line = input_line ic in
-    l := line :: !l;
-    loop ()
+let banned =
+  let ic = open_in "./src/banned.txt" in
+  let try_read () = try Some (input_line ic) with End_of_file -> None in
+  let rec loop acc =
+    match try_read () with
+    | Some s -> loop (s :: acc)
+    | None ->
+        close_in ic;
+        List.rev acc
   in
-  try loop ()
-  with End_of_file ->
-    close_in ic;
-    List.rev !l
-
-let banned = file_to_list "banned.txt"
+  loop []
 
 let get_letter a_string =
   String.make 1 (String.get a_string (Random.int (String.length a_string)))
