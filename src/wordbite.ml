@@ -7,7 +7,7 @@ type game = {
 let alphabet_double_vowels = "aabcdeefghiijklmnoopqrstuuvwxyz"
 
 let get_letter a_string =
-  String.make 1 (String.get a_string (Random.int (String.length a_string)))
+  String.make 1 (String.get a_string (Random.int (String.length a_string + 1)))
 
 let available_strs_aux a_string =
   let size = Random.int 2 in
