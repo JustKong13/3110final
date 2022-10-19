@@ -18,25 +18,25 @@ let rec parse_input s = ()
 let rec print_lst words =
   match words with
   | [] -> ""
+  | [ h ] -> h
   | h :: t -> h ^ ", " ^ print_lst t
-
-(** [set_up_game] initializes the game state for the user. *)
-let set_up_game =
-  ANSITerminal.print_string [ ANSITerminal.blue ]
-    "The list of usable letters are:\n";
-  print_endline
-    (print_lst (available_strs "aabcdeefghiijklmnoopqrstuuvwxyz" []));
-  print_endline "Type in a word constructed by the letters in the list above\n";
-  print_string "> ";
-  match read_line () with
-  | exception End_of_file -> ()
-  | input -> parse_input input
 
 (** [play_game input] starts the Wordbite game if [input] is "start". *)
 let rec play_game input =
   try
     match input with
-    | "start" -> set_up_game
+    | "start" -> (
+        ANSITerminal.print_string [ ANSITerminal.blue ]
+          "\n\nThe list of usable letters are:\n";
+        print_string "[";
+        print_string
+          (print_lst (available_strs "aabcdeefghiijklmnoopqrstuuvwxyz" []));
+        print_endline "]";
+        print_endline
+          "\nType in a word constructed by the letters in the list above";
+        print_string "> ";
+        match read_line () with
+        | input -> parse_input input)
     | _ -> raise InvalidString
   with InvalidString -> (
     ANSITerminal.print_string [ ANSITerminal.red ]
@@ -44,7 +44,6 @@ let rec play_game input =
     print_endline "Please type \'start\' to start the game.\n";
     print_string "> ";
     match read_line () with
-    | exception End_of_file -> ()
     | input -> play_game input)
 
 (** [main ()] prompts for the game to play, then starts it. *)
@@ -53,7 +52,6 @@ let main () =
   print_endline "Please type \'start\' to start the game.\n";
   print_string "> ";
   match read_line () with
-  | exception End_of_file -> ()
   | input -> play_game input
 
 (* Execute the game engine. *)
