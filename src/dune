@@ -1,4 +1,4 @@
 (library
- (name wordbite)
- (public_name Wordbite)
- (libraries ANSITerminal))
+ (name game)
+ (public_name Game)
+ (libraries ANSITerminal str))
