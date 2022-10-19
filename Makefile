@@ -23,3 +23,6 @@ doc:
 
 opendoc: doc
 	@bash opendoc.sh
+
+loc : 
+	cloc --by-file --include-lang=OCaml .

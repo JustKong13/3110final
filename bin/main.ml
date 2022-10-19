@@ -16,7 +16,9 @@ let rec parse_input s = ()
 (* 6. Repeat from step 2 *)
 
 let rec print_lst words =
-  match words with [] -> "" | h :: t -> h ^ ", " ^ print_lst words
+  match words with
+  | [] -> ""
+  | h :: t -> h ^ ", " ^ print_lst words
 
 (** [set_up_game] initializes the game state for the user. *)
 let set_up_game =
@@ -32,7 +34,10 @@ let set_up_game =
 
 (** [play_game input] starts the Wordbite game if [input] is "start". *)
 let rec play_game input =
-  try match input with "start" -> set_up_game | _ -> raise InvalidString
+  try
+    match input with
+    | "start" -> set_up_game
+    | _ -> raise InvalidString
   with InvalidString -> (
     ANSITerminal.print_string [ ANSITerminal.red ]
       "\nYou did not type in \'start\' correctly...\n";
