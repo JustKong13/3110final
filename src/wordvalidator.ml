@@ -19,4 +19,4 @@ let rec is_valid_word word_list word =
   | h :: _ when h = word -> true
   | _ :: t -> is_valid_word t word
 
-let check_word word = is_valid_word valid_words word
+let check_word word = is_valid_word valid_words (word ^ "\r")
