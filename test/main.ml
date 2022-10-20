@@ -12,7 +12,7 @@ let word_validator_tests =
   [
     word_validator_test "banana is a real word" "banana" true;
     word_validator_test "frog is a real word" "frog" true;
-    word_validator_test "asdf is not a real word" "asdf" true;
+    word_validator_test "asdf is not a real word" "asdf" false;
     word_validator_test "dont is a real word (contraction word)" "dont" true;
   ]
 
