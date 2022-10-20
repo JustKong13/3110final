@@ -1,0 +1,29 @@
+---
+# Members of your group.
+group:
+  - name: Jasmine Dong
+    netid: jqd3
+  - name: Justin Kong
+    netid: jk2338
+  - name: Tony Chen
+    netid: tc448
+# Your PM.
+pm:
+  name: Huy Nguyen
+  netid: hcn9
+# Set to false if you don't want your gallery entry to be public.
+publish: true
+# Pithy title
+title: "Wordbites (Better name to come)"
+# OK if this is a Cornell Github link, but public gallery viewers won't be able to see it.
+git-repo: "https://github.com/JustKong13/3110final"
+# If you have no demo screencast, replace the url string with an empty string ""
+demo-video-url: ""
+# Write a short, attention-grabbing description of your project.
+desc: >
+  Think you have a strong vocabulary? Are you one of those people who gets 
+  consistently in the 5-digits in word hunt? Try out wordbites! An interactive 
+  game where you move scrabbe like letters around to make as many words as 
+  possible.
+  
+  Compete against your friends, or try for the highest score! Happy wordbiting!
