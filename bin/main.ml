@@ -53,9 +53,10 @@ let rec parse_input s words =
     else raise InvalidString
   with InvalidString ->
     ANSITerminal.print_string [ ANSITerminal.red ]
-      "\n\n\
-       The word you entered did not consist of the strings in the list or was \
-       not a real word.\n";
+      ("\n\nYou entered:" ^ s
+     ^ "\n\
+        Unfortunately, it does not consist of strings in the list or is not a \
+        real word.\n");
     print_string "[";
     print_string (print_lst words);
     print_endline "]";
