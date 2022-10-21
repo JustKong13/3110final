@@ -1,4 +1,4 @@
-To build the project
+To build the project, type in terminal of directory folder
 
 - `dune build`
 
@@ -10,8 +10,6 @@ Packages we are using:
 
     - `opam install ANSITerminal`
 
-To start the game: 
+To start the game in terminal: 
     
 - `make play`
-
-    - `opam install ANSITerminal`
