@@ -43,7 +43,8 @@ let rec parse_input s words =
     if
       check_word s
       && (String.equal (sort (form_word s words "")) (sort s)
-         || contains (sort (form_word s words "")) (sort s))
+         || contains (sort (form_word s words "")) (sort s)
+         || contains (form_word s words "") s)
     then (
       ANSITerminal.print_string [ ANSITerminal.green ] ("Word valid! " ^ s);
       print_endline "\nType another word!\n";
