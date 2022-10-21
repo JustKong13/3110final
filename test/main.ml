@@ -1,7 +1,7 @@
 (** IN ORDER TO RUN TESTS, YOU MUST DO [dune exec test/main.exe] IN THE TERMINAL*)
 
 open OUnit2
-open Wordbite
+open Game.Wordbite
 
 let alphabet_double_vowels = "aabcdeefghiijklmnoopqrstuuvwxyz"
 
