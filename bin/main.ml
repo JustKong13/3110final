@@ -40,7 +40,12 @@ let rec print_lst words =
     word, otherwise prompts the user for another input. *)
 let rec parse_input s words =
   try
-    if String.equal (sort (form_word s words "")) (sort s) && check_word s then (
+    if
+      check_word s
+      && (String.equal (sort (form_word s words "")) (sort s)
+         || contains (sort (form_word s words "")) (sort s)
+         || contains (form_word s words "") s)
+    then (
       ANSITerminal.print_string [ ANSITerminal.green ] ("Word valid! " ^ s);
       print_endline "\nType another word!\n";
       print_string "> ";
@@ -48,9 +53,10 @@ let rec parse_input s words =
     else raise InvalidString
   with InvalidString ->
     ANSITerminal.print_string [ ANSITerminal.red ]
-      "\n\n\
-       The word you entered did not consist of the strings in the list or was \
-       not a real word.\n";
+      ("\n\nYou entered:" ^ s
+     ^ "\n\
+        Unfortunately, it does not consist of strings in the list or is not a \
+        real word.\n");
     print_string "[";
     print_string (print_lst words);
     print_endline "]";
