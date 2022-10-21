@@ -40,7 +40,11 @@ let rec print_lst words =
     word, otherwise prompts the user for another input. *)
 let rec parse_input s words =
   try
-    if String.equal (sort (form_word s words "")) (sort s) && check_word s then (
+    if
+      check_word s
+      && (String.equal (sort (form_word s words "")) (sort s)
+         || contains (sort (form_word s words "")) (sort s))
+    then (
       ANSITerminal.print_string [ ANSITerminal.green ] ("Word valid! " ^ s);
       print_endline "\nType another word!\n";
       print_string "> ";
