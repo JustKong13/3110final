@@ -5,14 +5,14 @@ open Game.Wordvalidator
 
 exception InvalidString
 
-(** [sort s] sorts [s] in alphabetical order. *)
+(** [sort s] sorts string [s] in alphabetical order. *)
 let sort s =
   let n = String.length s in
   let a = Array.init n (fun i -> s.[i]) in
   Array.sort Char.compare a;
   String.init n (fun i -> a.(i))
 
-(** [contains s1 s2] checks whether [s1] has a substring of [s2]. *)
+(** [contains s1 s2] checks whether string [s2] is a substring of string [s1]. *)
 let contains s1 s2 =
   let re = Str.regexp_string s2 in
   try
@@ -20,8 +20,9 @@ let contains s1 s2 =
     true
   with Not_found -> false
 
-(** [form_word s words acc] checks if [words] has strings that a substrings of
-    [s] and returns a string of all the substrings. *)
+(** [form_word s words acc] iterates over string list [words] and checks whether
+    each string is a substring of string [s]. Returns a string of all of the
+    elements in [words] that are substrings in [s]. *)
 let rec form_word s words acc =
   match words with
   | [] -> acc
@@ -34,14 +35,14 @@ let rec print_lst words =
   | [ h ] -> h
   | h :: t -> h ^ ", " ^ print_lst t
 
-(** [parse_input s words] parses [s] checking if it is made up of strings from
-    [words] and checks whether [s] is a real word, otherwise prompts the user
-    for another input. *)
+(** [parse_input s words] parses [s] by checking if it is constructed by
+    concatenation of strings in list [words] and checks whether [s] is a real
+    word, otherwise prompts the user for another input. *)
 let rec parse_input s words =
   try
     if String.equal (sort (form_word s words "")) (sort s) && check_word s then (
-      print_endline ("Word valid! " ^ s);
-      print_endline "Type another word!\n";
+      ANSITerminal.print_string [ ANSITerminal.green ] ("Word valid! " ^ s);
+      print_endline "\nType another word!\n";
       print_string "> ";
       parse_input (read_line ()) words)
     else raise InvalidString
@@ -70,9 +71,9 @@ let rec play_game input =
           "\n\nThe list of usable letters are:\n";
         (* Add helper function call to wordbite.ml *)
         let words = available_strs "aabcdeefghiijklmnoopqrstuuvwxyz" [] in
-        print_string "[";
+        print_string "[ ";
         print_string (print_lst words);
-        print_endline "]";
+        print_endline " ]";
         print_endline
           "\nType in a word constructed by the letters in the list above\n";
         print_string "> ";
