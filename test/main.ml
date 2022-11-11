@@ -2,7 +2,8 @@
     TERMINAL*)
 
 open OUnit2
-open Wordbite
+open Game.Wordbite
+open Game.Wordvalidator
 
 let word_validator_test name word expecetd_output =
   name >:: fun _ -> assert_equal (check_word word) expecetd_output
