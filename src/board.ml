@@ -15,19 +15,38 @@ module Board = struct
   let empty = List.init 9 (fun _ -> List.init 8 (fun _ -> None))
 
   (** [get_letter] gets the letter at the coordinates (x,y) on the board b*)
-  let get_letter ((x, y) : coord) (b : t) = List.nth (List.nth b x) y
+  let get_letter ((x, y) : coord) (b : t) =
+    match List.nth (List.nth b x) y with
+    | Some c -> c
+    | None -> '-'
 
-  (** [place_in_row] takes a character [a] and places it in the [y]th position
+  (** [place_in_row] takes a character [a] and places it in the [x]th position
       in a row *)
-  let rec place_in_row (a : char) (y : int) (row : letter list) =
+  let rec place_in_row (a : char) (x : int) (row : letter list) =
     match row with
     | [] -> row
-    | h :: t -> if y = 0 then Some a :: t else h :: place_in_row a (y - 1) t
+    | h :: t -> if x = 0 then Some a :: t else h :: place_in_row a (x - 1) t
 
   (** [place_letter a (x, y) b] places a letter [a] at the coordinates [(x, y)]
       on the board [b]*)
-  let place_letter (a : char) ((x, y) : coord) (b : t) =
+  let rec place_letter (a : char) ((x, y) : coord) (b : t) =
     match b with
     | [] -> []
-    | h :: t -> assert false
+    | h :: t ->
+        if y = 0 then place_in_row a x h :: t
+        else h :: place_letter a (x, y - 1) t
+
+  let rec row_to_list (row : letter list) =
+    match row with
+    | [] -> []
+    | h :: t -> begin
+        match h with
+        | None -> '-' :: row_to_list t
+        | Some a -> a :: row_to_list t
+      end
+
+  let rec board_to_list (b : t) =
+    match b with
+    | [] -> []
+    | h :: t -> row_to_list h :: board_to_list t
 end
