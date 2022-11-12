@@ -57,6 +57,10 @@ let word_validator_tests =
         [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
         [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
       ];
+    test "finding a" (B.get_letter (4, 4) (B.place_letter 'a' (4, 4) b1)) 'a';
+    test "finding an empty tile"
+      (B.get_letter (4, 4) (B.place_letter 'a' (5, 4) b1))
+      '-';
   ]
 
 let tests = "wordbite test suite" >::: List.flatten [ word_validator_tests ]
