@@ -4,16 +4,63 @@
 open OUnit2
 open Game
 open Wordvalidator
+open Board
 
-let word_validator_test name word expecetd_output =
-  name >:: fun _ -> assert_equal (check_word word) expecetd_output
+let test name f expeceted_output =
+  name >:: fun _ -> assert_equal f expeceted_output
+
+module B = Board
+
+let b1 = B.empty
 
 let word_validator_tests =
   [
-    word_validator_test "banana is a real word" "banana" true;
-    word_validator_test "frog is a real word" "frog" true;
-    word_validator_test "asdf is not a real word" "asdf" false;
-    word_validator_test "dont is a real word (contraction word)" "dont" true;
+    test "banana is a real word" (check_word "banana") true;
+    test "frog is a real word" (check_word "frog") true;
+    test "asdf is not a real word" (check_word "asdf") false;
+    test "dont is a real word (contraction word)" (check_word "dont") true;
+    test "empty board" (B.board_to_list b1)
+      [
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+      ];
+    test "inserting a into (0,0)"
+      (B.board_to_list (B.place_letter 'a' (0, 0) b1))
+      [
+        [ 'a'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+      ];
+    test "inserting a into (4,4)"
+      (B.board_to_list (B.place_letter 'a' (4, 4) b1))
+      [
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; 'a'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+      ];
+    test "finding a" (B.get_letter (4, 4) (B.place_letter 'a' (4, 4) b1)) 'a';
+    test "finding an empty tile"
+      (B.get_letter (4, 4) (B.place_letter 'a' (5, 4) b1))
+      '-';
   ]
 
 let tests = "wordbite test suite" >::: List.flatten [ word_validator_tests ]
