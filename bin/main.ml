@@ -65,39 +65,33 @@ let rec parse_input s words =
     print_string "> ";
     parse_input (read_line ()) words
 
-(** [play_game input] starts the Wordbite game if [input] is ["start"],
-    otherwise prompts the user to correctly enter ["start"] again. *)
-let rec play_game input =
+(** [play_game] starts the game if user types in ["start"]. *)
+let rec play_game () =
+  print_string "\nPlease type \'start\' to start the game.\n";
+  print_string "> ";
   try
+    let input = read_line () in
     match input with
     | "start" ->
-        ANSITerminal.print_string [ ANSITerminal.green ]
-          "\n\nThe game has started!\n";
-        ANSITerminal.print_string [ ANSITerminal.blue ]
-          "\n\nThe list of usable letters are:\n";
-        (* Add helper function call to wordbite.ml *)
-        let words = available_strs "aabcdeefghiijklmnoopqrstuuvwxyz" [] in
-        print_string "[ ";
-        print_string (print_lst words);
-        print_endline " ]";
-        print_endline
-          "\nType in a word constructed by the letters in the list above\n";
-        print_string "> ";
-        parse_input (read_line ()) words
+        Gui.create_window
+        (* ANSITerminal.print_string [ ANSITerminal.green ] "\n\nThe game has
+           started!\n"; ANSITerminal.print_string [ ANSITerminal.blue ] "\n\nThe
+           list of usable letters are:\n"; (* Add helper function call to
+           wordbite.ml *) let words = available_strs
+           "aabcdeefghiijklmnoopqrstuuvwxyz" [] in print_string "[ ";
+           print_string (print_lst words); print_endline " ]"; print_endline
+           "\nType in a word constructed by the letters in the list above\n";
+           print_string "> "; parse_input (read_line ()) words *)
     | _ -> raise InvalidString
   with InvalidString ->
     ANSITerminal.print_string [ ANSITerminal.red ]
-      "\nYou did not type in \'start\' correctly...\n";
-    print_endline "Please type \'start\' to start the game.\n";
-    print_string "> ";
-    play_game (read_line ())
+      "\nYou did not type in \'start\' correctly...";
+    play_game ()
 
 (** [main ()] prompts for the game to play, then starts it. *)
 let main () =
-  ANSITerminal.print_string [ ANSITerminal.cyan ] "\n\nWelcome to Wordbite.\n";
-  print_endline "Please type \'start\' to start the game.\n";
-  print_string "> ";
-  play_game (read_line ())
+  ANSITerminal.print_string [ ANSITerminal.cyan ] "\n\nWelcome to Wordbite!\n";
+  play_game ()
 
 (* Execute the game engine. *)
 let () = main ()
