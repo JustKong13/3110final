@@ -1,10 +1,10 @@
+Random.self_init ()
+
 type game = {
   time_elapsed : float;
   score : int;
   words_found : string list;
 }
-
-let alphabet_double_vowels = "aabcdeefghiijklmnoopqrstuuvwxyz"
 
 let banned =
   let ic = open_in "./src/banned.txt" in
@@ -21,21 +21,20 @@ let banned =
 let get_letter a_string =
   String.make 1 (String.get a_string (Random.int (String.length a_string)))
 
-let rec available_strs_aux a_string =
+let rec strings_aux a_string =
   let size = Random.int 2 in
   if size = 0 then get_letter a_string
   else
-    let first_letter = get_letter a_string in
+    let first = get_letter a_string in
     let new_alphabet_string =
-      Str.global_replace (Str.regexp first_letter) "" a_string
+      Str.global_replace (Str.regexp first) "" a_string
     in
     let second_letter = get_letter new_alphabet_string in
-    if List.mem (first_letter ^ second_letter) banned then
-      available_strs_aux a_string
-    else first_letter ^ second_letter
+    if List.mem (first ^ second_letter) banned then strings_aux a_string
+    else first ^ second_letter
 
-let rec available_strs a_string accumulated_lst =
-  if List.length accumulated_lst < 10 then
-    let new_str = available_strs_aux a_string in
-    available_strs a_string (new_str :: accumulated_lst)
-  else accumulated_lst
+let rec strings a_string acc =
+  if List.length acc < 10 then
+    let new_str = strings_aux a_string in
+    strings a_string (new_str :: acc)
+  else acc

@@ -76,7 +76,7 @@ let rec play_game input =
         ANSITerminal.print_string [ ANSITerminal.blue ]
           "\n\nThe list of usable letters are:\n";
         (* Add helper function call to wordbite.ml *)
-        let words = available_strs "aabcdeefghiijklmnoopqrstuuvwxyz" [] in
+        let words = strings "aabcdeefghiijklmnoopqrstuuvwxyz" [] in
         print_string "[ ";
         print_string (print_lst words);
         print_endline " ]";
