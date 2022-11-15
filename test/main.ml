@@ -97,11 +97,9 @@ let double_vowels = "aabcdeefghiijklmnoopqrstuuvwxyz"
   [] [] ]*)
 
 (*Tile.ml tests*)
-let str_list = [ "dm"; "s"; "e"; "a"; "ng"; "bn"; "k"; "lj"; "en"; "ie" ]
-
-module T = Tile
-
-let t1 = create str_list []
+(*let str_list = [ "dm"; "s"; "e"; "a"; "ng"; "bn"; "k"; "lj"; "en"; "ie" ];;
+let t1 = create str_list [];;
+place t1 [];; *)
 
 (*let create_test (name : string) (input : string list) (expected_output :
   Tile.t list) : test = name >:: fun _ -> assert_equal expected_output (create
