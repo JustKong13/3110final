@@ -2,6 +2,7 @@
 
 open Game.Wordbite
 open Game.Wordvalidator
+open Graphics
 
 exception InvalidString
 
@@ -65,23 +66,33 @@ let rec parse_input s words =
     print_string "> ";
     parse_input (read_line ()) words
 
-(** [play_game] starts the game if user types in ["start"]. *)
+let rec game_handler () =
+  let event = wait_next_event [ Key_pressed ] in
+  match event.key with
+  | 'q' | 'Q' -> exit 0
+  | 'p' | 'P' ->
+      Gui.draw_empty_board ();
+      Gui.draw_usable_letters
+        (available_strs "aabcdeefghiijklmnoopqrstuuvwxyz" []);
+      Gui.draw_words_found ();
+      Graphics.moveto 400 (Graphics.current_y () - 20);
+      Gui.draw_letters ();
+      game_handler ()
+  | 'c' ->
+      Graphics.clear_graph ();
+      game_handler ()
+  | _ -> game_handler ()
+
+(** [play_game] starts the game if user types ["start"]. *)
 let rec play_game () =
   print_string "\nPlease type \'start\' to start the game.\n";
   print_string "> ";
   try
-    let input = read_line () in
+    let input = String.lowercase_ascii (read_line ()) in
     match input with
     | "start" ->
-        Gui.create_window
-        (* ANSITerminal.print_string [ ANSITerminal.green ] "\n\nThe game has
-           started!\n"; ANSITerminal.print_string [ ANSITerminal.blue ] "\n\nThe
-           list of usable letters are:\n"; (* Add helper function call to
-           wordbite.ml *) let words = available_strs
-           "aabcdeefghiijklmnoopqrstuuvwxyz" [] in print_string "[ ";
-           print_string (print_lst words); print_endline " ]"; print_endline
-           "\nType in a word constructed by the letters in the list above\n";
-           print_string "> "; parse_input (read_line ()) words *)
+        Gui.create_window;
+        game_handler ()
     | _ -> raise InvalidString
   with InvalidString ->
     ANSITerminal.print_string [ ANSITerminal.red ]
