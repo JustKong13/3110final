@@ -1,32 +1,48 @@
 open Graphics
 
-(* let get_grid_xy x y = *)
+let get_board_coords (x, y) = ((x - 60) / 60, -((y / 60) - 8))
+let get_grid_coords (x, y) = ((x * 60) + 60, 480 - (y * 60))
 
-(* [ (0, 0); ...; (0, 7) (1, 0); ...; (1, 7) ... (7, 0); ...; (7, 7)
+let draw_selected_tile (x, y) () =
+  set_font "-*-fixed-medium-r-semicondensed--13-*-*-*-*-*-iso8859-1";
+  moveto ((3 * size_x () / 4) - 10) (size_y () - 100);
+  let board_coords = get_board_coords (x, y) in
+  draw_string
+    ("Current tile selected: " ^ "("
+    ^ string_of_int (fst board_coords)
+    ^ ", "
+    ^ string_of_int (snd board_coords)
+    ^ ")")
 
-   (7, 0) x goes from 60 - 120 y goes from 60 - 120
+let draw_initial_tile_selected () =
+  set_font "-*-fixed-medium-r-semicondensed--13-*-*-*-*-*-iso8859-1";
+  moveto ((3 * size_x () / 4) - 10) (size_y () - 100);
+  draw_string "Current tile selected: NONE"
 
-   (7, 1) x goes from 120 - 180 y goes from 60 - 120
+(* change to draw_char*)
+let draw_single_letter c (x, y) =
+  let grid_coords = get_grid_coords (x, y) in
+  moveto (fst grid_coords + 20) (snd grid_coords + 4);
+  draw_string c
 
-   (6, 0) x goes from 60 - 120 y goes from 120 - 180 ] *)
-
-(* draw the letterat x+20 and y+4 *)
-let draw_letters () =
+(* change to draw all letters in the board *)
+let draw_all_letters () =
   set_font "-*-fixed-medium-r-semicondensed--50-*-*-*-*-*-iso8859-1";
-  moveto 80 64;
-  for v = 0 to 8 do
-    draw_char 'C';
-    moveto (80 + 60) 64
+  for x = 0 to 7 do
+    for y = 0 to 7 do
+      let temp = string_of_int (x + y) in
+      draw_single_letter temp (x, y)
+    done
   done
 
-let rec draw_usable_letters lst =
-  match lst with
-  | [] -> ()
-  | h :: t ->
-      draw_string (h ^ ", ");
-      draw_usable_letters t
+let draw_words_found () =
+  set_color black;
+  set_font "-*-fixed-medium-r-semicondensed--25-*-*-*-*-*-iso8859-1";
+  moveto (3 * size_x () / 4) (size_y () - 200);
+  draw_string "Words Found"
+(* add function to draw words_found for type [game]*)
 
-let draw_empty_board () =
+let draw_gridlines () =
   set_color black;
   set_line_width 1;
   moveto 60 60;
@@ -40,15 +56,17 @@ let draw_empty_board () =
     moveto 60 (current_y () + 60)
   done
 
-let draw_words_found () =
-  set_color black;
-  moveto (3 * size_x () / 4) (size_y () - 130);
-  set_font "-*-fixed-medium-r-semicondensed--25-*-*-*-*-*-iso8859-1";
-  draw_string "Words Found"
+let draw_game () =
+  draw_gridlines ();
+  draw_words_found ();
+  draw_all_letters ()
+
+let draw_title_screen () =
+  draw_string "Press \'p\' to start the game";
+  draw_string "Press \'q\' to quit"
 
 let create_window =
   open_graph "";
   resize_window 800 650;
   set_window_title "Wordbite";
-  draw_string "Press \'p\' to start the game";
-  draw_string "Press \'q\' to quit"
+  draw_title_screen

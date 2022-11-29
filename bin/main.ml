@@ -1,5 +1,3 @@
-(* This file was referenced using FA22 CS 3110 A2 assignment. *)
-
 open Game.Wordbite
 open Game.Wordvalidator
 open Graphics
@@ -66,21 +64,25 @@ let rec parse_input s words =
     print_string "> ";
     parse_input (read_line ()) words
 
+(* [turn_handler] handers player input to select tile and make changes to the
+   board *)
+let rec turn_handler () =
+  let event = wait_next_event [ Button_down ] in
+  match event.button with
+  | true ->
+      Gui.draw_selected_tile (event.mouse_x, event.mouse_y) ();
+      turn_handler ()
+  | false -> turn_handler ()
+
+(* [game_handler] handles player input to play and quit the game. *)
 let rec game_handler () =
   let event = wait_next_event [ Key_pressed ] in
   match event.key with
   | 'q' | 'Q' -> exit 0
   | 'p' | 'P' ->
-      Gui.draw_empty_board ();
-      Gui.draw_usable_letters
-        (available_strs "aabcdeefghiijklmnoopqrstuuvwxyz" []);
-      Gui.draw_words_found ();
-      Graphics.moveto 400 (Graphics.current_y () - 20);
-      Gui.draw_letters ();
-      game_handler ()
-  | 'c' ->
-      Graphics.clear_graph ();
-      game_handler ()
+      Gui.draw_game ();
+      (* Gui.draw_initial_tile_selected (); *)
+      turn_handler ()
   | _ -> game_handler ()
 
 (** [play_game] starts the game if user types ["start"]. *)
@@ -91,7 +93,7 @@ let rec play_game () =
     let input = String.lowercase_ascii (read_line ()) in
     match input with
     | "start" ->
-        Gui.create_window;
+        Gui.create_window ();
         game_handler ()
     | _ -> raise InvalidString
   with InvalidString ->
@@ -99,7 +101,7 @@ let rec play_game () =
       "\nYou did not type in \'start\' correctly...";
     play_game ()
 
-(** [main ()] prompts for the game to play, then starts it. *)
+(** [main] prompts for the game to play, then starts it. *)
 let main () =
   ANSITerminal.print_string [ ANSITerminal.cyan ] "\n\nWelcome to Wordbite!\n";
   play_game ()
