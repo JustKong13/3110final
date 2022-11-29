@@ -64,15 +64,22 @@ let rec parse_input s words =
     print_string "> ";
     parse_input (read_line ()) words
 
-(* [turn_handler] handers player input to select tile and make changes to the
-   board *)
+(* [turn_handler] handles player input to select tile and make changes to the
+   board. *)
 let rec turn_handler () =
-  let event = wait_next_event [ Button_down ] in
-  match event.button with
-  | true ->
-      Gui.draw_selected_tile (event.mouse_x, event.mouse_y) ();
-      turn_handler ()
-  | false -> turn_handler ()
+  let event = wait_next_event [ Button_down; Key_pressed ] in
+  match (event.keypressed, event.button) with
+  | true, true | true, false -> (
+      match event.key with
+      | 'q' | 'Q' -> exit 0
+      | _ -> turn_handler ())
+  | false, true -> (
+      match event.button with
+      | true ->
+          Gui.draw_selected_tile (event.mouse_x, event.mouse_y) ();
+          turn_handler ()
+      | false -> turn_handler ())
+  | false, false -> turn_handler ()
 
 (* [game_handler] handles player input to play and quit the game. *)
 let rec game_handler () =
