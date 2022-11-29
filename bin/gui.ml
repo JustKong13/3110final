@@ -1,23 +1,32 @@
 open Graphics
 
-let get_board_coords (x, y) = ((x - 60) / 60, -((y / 60) - 8))
+let get_board_coords (x, y) =
+  if x >= 60 then (-((y / 60) - 8), (x - 60) / 60) else (-1, -1)
+
 let get_grid_coords (x, y) = ((x * 60) + 60, 480 - (y * 60))
+
+let draw_none_selection () =
+  set_font "-*-fixed-medium-r-semicondensed--13-*-*-*-*-*-iso8859-1";
+  moveto ((3 * size_x () / 4) - 10) (size_y () - 100);
+  draw_string "Current tile selected: NONE"
 
 let draw_selected_tile (x, y) () =
   set_font "-*-fixed-medium-r-semicondensed--13-*-*-*-*-*-iso8859-1";
   moveto ((3 * size_x () / 4) - 10) (size_y () - 100);
   let board_coords = get_board_coords (x, y) in
-  draw_string
-    ("Current tile selected: " ^ "("
-    ^ string_of_int (fst board_coords)
-    ^ ", "
-    ^ string_of_int (snd board_coords)
-    ^ ")")
-
-let draw_initial_tile_selected () =
-  set_font "-*-fixed-medium-r-semicondensed--13-*-*-*-*-*-iso8859-1";
-  moveto ((3 * size_x () / 4) - 10) (size_y () - 100);
-  draw_string "Current tile selected: NONE"
+  if
+    fst board_coords >= 0
+    && fst board_coords <= 7
+    && snd board_coords >= 0
+    && snd board_coords <= 7
+  then
+    draw_string
+      ("Current tile selected: " ^ "("
+      ^ string_of_int (fst board_coords)
+      ^ ", "
+      ^ string_of_int (snd board_coords)
+      ^ ")")
+  else draw_none_selection ()
 
 (* change to draw_char*)
 let draw_single_letter c (x, y) =
