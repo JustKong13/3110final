@@ -86,6 +86,8 @@ let word_validator_tests =
   ]
 
 (*Wordbite.ml tests*)
+
+let wordbite_test = []
 let double_vowels = "aabcdeefghiijklmnoopqrstuuvwxyz"
 
 (*let strings_test (name : string) (a_string : string) (acc : string list)
@@ -105,5 +107,8 @@ let double_vowels = "aabcdeefghiijklmnoopqrstuuvwxyz"
 
   let tile_tests = [ create_test "create tiles" str_list [] ]*)
 
-let tests = "wordbite test suite" >::: List.flatten [ word_validator_tests ]
+let tests =
+  "wordbite test suite"
+  >::: List.flatten [ word_validator_tests; wordbite_test ]
+
 let _ = run_test_tt_main tests

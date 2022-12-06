@@ -15,11 +15,9 @@ let rec parse_input s = ()
 (* 5. Add string to list of checked words *)
 (* 6. Repeat from step 2 *)
 
-let rec print_lst words =
-  match words with
-  | [] -> ""
-  | [ h ] -> h
-  | h :: t -> h ^ ", " ^ print_lst t
+module G = Game.Wordbite
+
+let game_state = G.init_game
 
 (** [play_game input] starts the Wordbite game if [input] is "start". *)
 let rec play_game input =
@@ -28,14 +26,17 @@ let rec play_game input =
     | "start" -> (
         ANSITerminal.print_string [ ANSITerminal.blue ]
           "\n\nHere is your starting board\n";
-        print_string "[";
-        print_string "asdf";
-        print_endline "]";
+
+        print_string (G.get_string_of_board game_state.board);
+
         print_endline
-          "\nType in a word constructed by the letters in the list above";
+          "\n\
+           Move a character to an empty spot (x1, y1) to (x2, y2) by typing \
+           (`x1` `y1`) (`x2` `y2`)";
         print_string "> ";
         match read_line () with
         | input -> parse_input input)
+    | "quit" -> exit 0
     | _ -> raise InvalidString
   with InvalidString -> (
     ANSITerminal.print_string [ ANSITerminal.red ]
