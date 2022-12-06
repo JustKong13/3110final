@@ -17,6 +17,42 @@ let string_type (t : t) =
   | HTile -> "HTile"
   | VTile -> "VTile"
 
+(*Generate valid word list*)
+let banned =
+  let ic = open_in "banned.txt" in
+  let try_read () = try Some (input_line ic) with End_of_file -> None in
+  let rec loop acc =
+    match try_read () with
+    | Some s -> loop (s :: acc)
+    | None ->
+        close_in ic;
+        List.rev acc
+  in
+  loop []
+
+let get_letter a_string =
+  String.make 1 (String.get a_string (Random.int (String.length a_string)))
+
+let rec strings_aux a_string =
+  let size = Random.int 2 in
+  if size = 0 then get_letter a_string
+  else
+    let first = get_letter a_string in
+    let new_alphabet_string =
+      Str.global_replace (Str.regexp first) "" a_string
+    in
+    let second_letter = get_letter new_alphabet_string in
+    if List.mem (first ^ second_letter) banned then strings_aux a_string
+    else first ^ second_letter
+
+let double_vowels = "aabcdeefghiijklmnoopqrstuuvwxyz"
+
+let rec strings a_string acc =
+  if List.length acc < 10 then
+    let new_str = strings_aux a_string in
+    strings a_string (new_str :: acc)
+  else acc
+
 let string_pos (t : t) =
   match t.position with
   | x, y -> "(" ^ string_of_int x ^ " , " ^ string_of_int y ^ ")"
@@ -90,3 +126,8 @@ let rec place (t_lst : t list) (full : (int * int) list) =
   | h :: t ->
       let pair = place_aux (h, full) in
       get_tile pair :: place t (get_full pair)
+
+let make_tile_list (s : string) =
+  let s1 = strings double_vowels [] in
+  let t1 = create s1 [] in
+  place t1 []
