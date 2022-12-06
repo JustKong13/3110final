@@ -1,10 +1,22 @@
 Random.self_init ()
 
+open Game.Board
+module B = Board
+
 type game = {
-  time_elapsed : float;
-  score : int;
-  words_found : string list;
+  mutable time_elapsed : float;
+  mutable score : int;
+  mutable words_found : string list;
+  mutable board : char list list;
 }
+
+let init_game =
+  {
+    time_elapsed = 0.0;
+    score = 0;
+    words_found = [];
+    board = B.board_to_list B.empty;
+  }
 
 let banned =
   let ic = open_in "./src/banned.txt" in

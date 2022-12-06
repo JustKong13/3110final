@@ -14,6 +14,9 @@ test:
 
 play:
 	OCAMLRUNPARAM=b dune exec bin/main.exe
+
+playterminal:
+	OCAMLRUNPARAM=b dune exec bin/main_terminal.exe
 	
 clean:
 	dune clean
