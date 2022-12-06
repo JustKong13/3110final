@@ -26,9 +26,7 @@ let rec play_game input =
     | "start" -> (
         ANSITerminal.print_string [ ANSITerminal.blue ]
           "\n\nHere is your starting board\n";
-
-        print_string (G.get_string_of_board game_state.board);
-
+        print_string (G.get_string_of_board (B.board_to_list game_state.board));
         print_endline
           "\n\
            Move a character to an empty spot (x1, y1) to (x2, y2) by typing \

@@ -87,7 +87,30 @@ let word_validator_tests =
 
 (*Wordbite.ml tests*)
 
-let wordbite_test = []
+module W = Wordbite
+
+let game_state = W.init_game
+
+let wordbite_test =
+  [
+    test "initalized game time" game_state.time_elapsed 0.0;
+    test "initalized game score" game_state.score 0;
+    test "initalized words found" game_state.words_found [];
+    test "initalized board"
+      (B.board_to_list game_state.board)
+      [
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+        [ '-'; '-'; '-'; '-'; '-'; '-'; '-'; '-' ];
+      ];
+  ]
+
 let double_vowels = "aabcdeefghiijklmnoopqrstuuvwxyz"
 
 (*let strings_test (name : string) (a_string : string) (acc : string list)

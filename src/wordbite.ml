@@ -7,16 +7,11 @@ type game = {
   mutable time_elapsed : float;
   mutable score : int;
   mutable words_found : string list;
-  mutable board : char list list;
+  mutable board : B.letter list list;
 }
 
 let init_game =
-  {
-    time_elapsed = 0.0;
-    score = 0;
-    words_found = [];
-    board = B.board_to_list B.empty;
-  }
+  { time_elapsed = 0.0; score = 0; words_found = []; board = B.empty }
 
 let banned =
   let ic = open_in "./src/banned.txt" in
