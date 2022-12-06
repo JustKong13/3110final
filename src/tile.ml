@@ -2,8 +2,8 @@ Random.self_init ()
 
 type tile_type =
   | ATile
-  | BTile
-  | CTile
+  | HTile
+  | VTile
 
 type t = {
   tstring : string;
@@ -14,8 +14,8 @@ type t = {
 let string_type (t : t) =
   match t.ttype with
   | ATile -> "ATile"
-  | BTile -> "BTile"
-  | CTile -> "CTile"
+  | HTile -> "HTile"
+  | VTile -> "VTile"
 
 let string_pos (t : t) =
   match t.position with
@@ -41,20 +41,20 @@ let get_y pair =
 let max_x (t : t) =
   match t.ttype with
   | ATile -> 7
-  | BTile -> 6
-  | CTile -> 7
+  | HTile -> 6
+  | VTile -> 7
 
 let max_y (t : t) =
   match t.ttype with
   | ATile -> 8
-  | BTile -> 8
-  | CTile -> 7
+  | HTile -> 8
+  | VTile -> 7
 
 let create_aux (s : string) =
   if String.length s = 1 then { tstring = s; ttype = ATile; position = (0, 0) }
   else if Random.int 2 = 0 then
-    { tstring = s; ttype = BTile; position = (0, 0) }
-  else { tstring = s; ttype = CTile; position = (0, 0) }
+    { tstring = s; ttype = HTile; position = (0, 0) }
+  else { tstring = s; ttype = VTile; position = (0, 0) }
 
 let rec create (s : string list) (acc : t list) =
   match s with
@@ -66,7 +66,7 @@ let new_coords (t : t) (coord : int * int) =
 
 let adjacent (t : t) (pair : int * int) =
   if t.ttype = ATile then (get_x pair, get_y pair)
-  else if t.ttype = BTile then (1 + get_x pair, get_y pair)
+  else if t.ttype = HTile then (1 + get_x pair, get_y pair)
   else (get_x pair, 1 + get_y pair)
 
 let get_full pair =
