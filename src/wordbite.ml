@@ -51,7 +51,30 @@ let init_game =
     tile_list;
   }
 
-(*let move (t : t) (start_pos : int * int) (end_pos : int * int) =*)
+let rec get_list_pos (t_list : t list) =
+  match t_list with
+  | [] -> []
+  | h :: t -> h.position :: adjacent h h.position :: get_list_pos t
+
+let check_avail (t : t) (new_space : int * int) (pos_list : (int * int) list) =
+  if List.mem new_space pos_list || List.mem (adjacent t t.position) pos_list
+  then false
+  else true
+
+let move (t1 : t) (end_pos : int * int) (t_list : t list) =
+  let rec move_aux (t_list : t list) =
+    match t_list with
+    | [] -> []
+    | h :: t ->
+        if h.position = t1.position then new_coords h end_pos :: move_aux t
+        else h :: move_aux t
+  in
+  if check_avail t1 end_pos (get_list_pos t_list) then move_aux t_list
+  else failwith "Cannot move this tile due to overlapping."
+
+(*let check_for_word (t : t) (game_board : B.letter list list) = let board =
+  B.board_to_list game_board in let row = fst (t.position) in let col = snd
+  (t.position) in*)
 
 let rec row_to_string (row : string list) =
   match row with
