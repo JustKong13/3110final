@@ -21,7 +21,7 @@ let string_type (t : t) =
 
 (*Generate valid word list*)
 let banned =
-  let ic = open_in "banned.txt" in
+  let ic = open_in "./src/banned.txt" in
   let try_read () = try Some (input_line ic) with End_of_file -> None in
   let rec loop acc =
     match try_read () with
