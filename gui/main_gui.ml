@@ -31,26 +31,33 @@ let rec turn_handler (g : Wordbite.game) () =
           Gui.draw_game g ();
           Gui.draw_selected_tile (event.mouse_x, event.mouse_y) ();
           let coords = Gui.get_board_coords (event.mouse_x, event.mouse_y) in
-          if check_bounds coords then turn_handler_swap g ()
+          if check_bounds coords then turn_handler_swap g coords ()
           else turn_handler g ()
       | false -> turn_handler g ())
   | _ -> turn_handler g ()
 
 (** [turn_handler_swap g] handles swapping tiles between the selected tile and
     the curernt tile that the player is hovering over. *)
-and turn_handler_swap (g : Wordbite.game) () =
+and turn_handler_swap (g : Wordbite.game) (initial_coords : int * int) () =
   let event = wait_next_event [ Key_pressed ] in
   match event.key with
   | 'q' | 'Q' -> exit_game ()
   | 's' | 'S' ->
       moveto event.mouse_x event.mouse_y;
-      let coords = Gui.get_board_coords (event.mouse_x, event.mouse_y) in
-      if check_bounds coords then (
-        draw_string
-          (string_of_int (fst coords) ^ " " ^ string_of_int (snd coords));
-        turn_handler g ())
-      else turn_handler_swap g ()
-  | _ -> turn_handler_swap g ()
+      let new_coords = Gui.get_board_coords (event.mouse_x, event.mouse_y) in
+      if check_bounds new_coords then
+        try
+          let new_board =
+            Wordbite.move_on_board initial_coords new_coords g.board
+          in
+          let new_g = { g with board = new_board } in
+          clear_graph ();
+          Gui.draw_game new_g ();
+          Gui.draw_none_selection ();
+          turn_handler new_g ()
+        with Failure _ -> turn_handler_swap g initial_coords ()
+      else turn_handler_swap g initial_coords ()
+  | _ -> turn_handler_swap g initial_coords ()
 
 (** [game_handler] handles player input to play and quit the game. *)
 let rec game_handler () =
@@ -60,7 +67,6 @@ let rec game_handler () =
   | 'p' | 'P' ->
       let g = Wordbite.init_game in
       Gui.draw_game g ();
-      print_string (Wordbite.get_string_of_board (Board.board_to_list g.board));
       Gui.draw_none_selection ();
       turn_handler g ()
   | _ -> game_handler ()
