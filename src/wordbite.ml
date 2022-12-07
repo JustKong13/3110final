@@ -10,6 +10,7 @@ type game = {
   mutable score : int;
   mutable words_found : string list;
   mutable board : B.letter list list;
+  mutable tile_list : t list;
 }
 
 let tile_list = T.tile_list
@@ -23,9 +24,21 @@ let rec generate_game_board tile_list game_board =
       | ATile ->
           B.place_letter h.tstring h.position (generate_game_board t game_board)
       | HTile ->
-          B.place_letter h.tstring h.position (generate_game_board t game_board)
+          B.place_letter
+            (String.make 1 (String.get h.tstring 0))
+            h.position
+            (B.place_letter
+               (String.make 1 (String.get h.tstring 1))
+               (fst h.position + 1, snd h.position)
+               (generate_game_board t game_board))
       | VTile ->
-          B.place_letter h.tstring h.position (generate_game_board t game_board)
+          B.place_letter
+            (String.make 1 (String.get h.tstring 0))
+            h.position
+            (B.place_letter
+               (String.make 1 (String.get h.tstring 1))
+               (fst h.position, snd h.position + 1)
+               (generate_game_board t game_board))
     end
 
 let init_game =
@@ -34,6 +47,7 @@ let init_game =
     score = 0;
     words_found = [];
     board = generate_game_board tile_list !game_board;
+    tile_list;
   }
 
 let banned =
