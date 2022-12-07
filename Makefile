@@ -12,8 +12,8 @@ utop:
 test:
 	OCAMLRUNPARAM=b dune exec test/main.exe
 
-play:
-	OCAMLRUNPARAM=b dune exec bin/main.exe
+playgui:
+	OCAMLRUNPARAM=b dune exec bin/main_gui.exe
 
 playterminal:
 	OCAMLRUNPARAM=b dune exec bin/main_terminal.exe
@@ -28,4 +28,5 @@ opendoc: doc
 	@bash opendoc.sh
 
 loc : 
+	dune clean
 	cloc --by-file --include-lang=OCaml .
