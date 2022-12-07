@@ -11,7 +11,6 @@ type t
     position (x,y) on a game grid, where x represents its position on the
     x-axis, and y represents its position on the y-axis.*)
 
-val make_tile_list : string list -> t list
-(* [create s acc] instantiates a list of tiles with positions at (0,0) from the
-   string. It then gives a list of tiles random, valid positions that don't
-   overlap.*)
+val tile_list : t list
+(* [tile_list] is a list of tiles with random, valid positions 
+that don't overlap.*)

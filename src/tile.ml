@@ -5,6 +5,8 @@ type tile_type =
   | HTile
   | VTile
 
+(*type color = | Red | Blue | Yellow *)
+
 type t = {
   tstring : string;
   ttype : tile_type;
@@ -127,7 +129,7 @@ let rec place (t_lst : t list) (full : (int * int) list) =
       let pair = place_aux (h, full) in
       get_tile pair :: place t (get_full pair)
 
-let make_tile_list (s : string) =
+let tile_list =
   let s1 = strings double_vowels [] in
   let t1 = create s1 [] in
   place t1 []
