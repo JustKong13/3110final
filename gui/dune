@@ -1,0 +1,3 @@
+(executable
+ (name main_gui)
+ (libraries Game graphics ANSITerminal))
