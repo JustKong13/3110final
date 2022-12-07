@@ -76,6 +76,14 @@ let move (t1 : t) (end_pos : int * int) (t_list : t list) =
   B.board_to_list game_board in let row = fst (t.position) in let col = snd
   (t.position) in*)
 
+let move_on_board ((x1, y1) : B.coord) ((x2, y2) : B.coord)
+    (board : B.letter list list) =
+  if B.is_empty (x1, y1) board then raise (Failure "Letter not found")
+  else if B.is_empty (x2, y2) board then
+    let removed_letter_board = B.remove_letter (x1, y1) board in
+    B.place_letter (B.get_letter (x1, y1) board) (x2, y2) removed_letter_board
+  else raise (Failure "Position is occupied")
+
 let rec row_to_string (row : string list) =
   match row with
   | [] -> " |"

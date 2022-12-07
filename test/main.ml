@@ -83,24 +83,29 @@ let word_validator_tests =
     test "finding an empty tile"
       (B.get_letter (4, 4) (B.place_letter "a" (5, 4) b1))
       "-";
+    test "is_empty on a non empty tile"
+      (B.is_empty (4, 4) (B.place_letter "a" (4, 4) b1))
+      false;
   ]
 
 (*Wordbite.ml tests*)
 
 module W = Wordbite
 
-let game_state = W.init_game
+let init_game_state = W.init_game
+let test_board = B.place_letter "a" (4, 4) b1
 
 let wordbite_test =
   [
-    test "initalized game time" game_state.time_elapsed 0.0;
-    test "initalized game score" game_state.score 0;
-    test "initalized words found" game_state.words_found [];
-    test "initalized board"
-      (B.board_to_list game_state.board)
+    test "initalized game time" init_game_state.time_elapsed 0.0;
+    test "initalized game score" init_game_state.score 0;
+    test "initalized words found" init_game_state.words_found [];
+    test "move tile on board"
+      (B.board_to_list
+         (move_on_board (4, 4) (1, 1) (B.place_letter "a" (4, 4) b1)))
       [
         [ "-"; "-"; "-"; "-"; "-"; "-"; "-"; "-" ];
-        [ "-"; "-"; "-"; "-"; "-"; "-"; "-"; "-" ];
+        [ "-"; "a"; "-"; "-"; "-"; "-"; "-"; "-" ];
         [ "-"; "-"; "-"; "-"; "-"; "-"; "-"; "-" ];
         [ "-"; "-"; "-"; "-"; "-"; "-"; "-"; "-" ];
         [ "-"; "-"; "-"; "-"; "-"; "-"; "-"; "-" ];
