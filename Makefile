@@ -13,7 +13,7 @@ test:
 	OCAMLRUNPARAM=b dune exec test/main.exe
 
 playgui:
-	OCAMLRUNPARAM=b dune exec bin/main_gui.exe
+	OCAMLRUNPARAM=b dune exec gui/main_gui.exe
 
 playterminal:
 	OCAMLRUNPARAM=b dune exec bin/main_terminal.exe
