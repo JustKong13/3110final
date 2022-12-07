@@ -22,8 +22,8 @@ module Board = struct
 
   let is_empty ((x, y) : coord) (b : t) =
     match List.nth (List.nth b x) y with
-    | Some _ -> true
-    | None -> false
+    | Some _ -> false
+    | None -> true
 
   (** [place_in_row] takes a string [a] and places it in the [x]th position in a
       row *)
@@ -40,6 +40,18 @@ module Board = struct
     | h :: t ->
         if y = 0 then place_in_row a x h :: t
         else h :: place_letter a (x, y - 1) t
+
+  let rec remove_letter_in_row (x : int) (row : letter list) =
+    match row with
+    | [] -> row
+    | h :: t -> if x = 0 then None :: t else h :: remove_letter_in_row (x - 1) t
+
+  let rec remove_letter (x, y) (b : t) =
+    match b with
+    | [] -> []
+    | h :: t ->
+        if y = 0 then remove_letter_in_row x h :: t
+        else h :: remove_letter (x, y - 1) t
 
   let rec row_to_list (row : letter list) =
     match row with
