@@ -19,7 +19,7 @@ let string_type (t : t) =
 
 (*Generate valid word list*)
 let banned =
-  let ic = open_in "banned.txt" in
+  let ic = open_in "./src/banned.txt" in
   let try_read () = try Some (input_line ic) with End_of_file -> None in
   let rec loop acc =
     match try_read () with
@@ -127,7 +127,7 @@ let rec place (t_lst : t list) (full : (int * int) list) =
       let pair = place_aux (h, full) in
       get_tile pair :: place t (get_full pair)
 
-let make_tile_list (s : string) =
+let tile_list =
   let s1 = strings double_vowels [] in
   let t1 = create s1 [] in
   place t1 []

@@ -2,6 +2,8 @@ Random.self_init ()
 
 open Board
 module B = Board
+open Tile
+module T = Tile
 
 type game = {
   mutable time_elapsed : float;
@@ -10,8 +12,29 @@ type game = {
   mutable board : B.letter list list;
 }
 
+let tile_list = T.tile_list
+let game_board = ref B.empty
+
+let rec generate_game_board tile_list game_board =
+  match tile_list with
+  | [] -> game_board
+  | h :: t -> begin
+      match h.ttype with
+      | ATile ->
+          B.place_letter h.tstring h.position (generate_game_board t game_board)
+      | HTile ->
+          B.place_letter h.tstring h.position (generate_game_board t game_board)
+      | VTile ->
+          B.place_letter h.tstring h.position (generate_game_board t game_board)
+    end
+
 let init_game =
-  { time_elapsed = 0.0; score = 0; words_found = []; board = B.empty }
+  {
+    time_elapsed = 0.0;
+    score = 0;
+    words_found = [];
+    board = generate_game_board tile_list !game_board;
+  }
 
 let banned =
   let ic = open_in "./src/banned.txt" in
@@ -46,16 +69,16 @@ let rec strings a_string acc =
     strings a_string (new_str :: acc)
   else acc
 
-let rec row_to_string (row : char list) =
+let rec row_to_string (row : string list) =
   match row with
   | [] -> " |"
-  | h :: t -> " | " ^ String.make 1 h ^ row_to_string t
+  | h :: t -> " | " ^ h ^ row_to_string t
 
-let rec string_of_board (game_board : char list list) =
+let rec string_of_board (game_board : string list list) =
   match game_board with
   | [] -> ""
   | h :: t -> row_to_string h ^ "\n" ^ string_of_board t
 
-let get_string_of_board (game_board : char list list) =
+let get_string_of_board (game_board : string list list) =
   "___________________________________\n" ^ string_of_board game_board
   ^ "___________________________________\n"
