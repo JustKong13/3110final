@@ -88,11 +88,14 @@ let rec row_to_string (row : string list) =
   | [] -> " |"
   | h :: t -> " | " ^ h ^ row_to_string t
 
-let rec string_of_board (game_board : string list list) =
+let rec string_of_board (game_board : string list list) (n : int) =
   match game_board with
   | [] -> ""
-  | h :: t -> row_to_string h ^ "\n" ^ string_of_board t
+  | h :: t ->
+      string_of_int n ^ row_to_string h ^ "\n" ^ string_of_board t (n + 1)
 
 let get_string_of_board (game_board : string list list) =
-  "___________________________________\n" ^ string_of_board game_board
+  "    0   1   2   3   4   5   6   7   \n\
+   ___________________________________  \n"
+  ^ string_of_board game_board 0
   ^ "___________________________________\n"
