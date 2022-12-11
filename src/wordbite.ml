@@ -57,12 +57,24 @@ let rec get_list_pos (t_list : t list) =
   | h :: t -> h.position :: adjacent h h.position :: get_list_pos t
 
 let check_avail (t : t) (new_space : int * int) (pos_list : (int * int) list) =
-  if List.mem new_space pos_list || List.mem (adjacent t t.position) pos_list
+  if
+    List.mem new_space pos_list
+    || List.mem (adjacent t t.position) pos_list
+    || fst new_space > max_x t
+    || snd new_space > max_y t
   then false
   else true
 
-let move (t1 : t) (end_pos : int * int) (t_list : t list) =
-  let rec move_aux (t_list : t list) =
+let rec find_tile (start_pos : int * int) (end_pos : int * int)
+    (t_list : t list) =
+  match t_list with
+  | [] -> failwith "Tile not found!"
+  | h :: t ->
+      if h.position = start_pos then h else find_tile start_pos end_pos t
+
+let move (start_pos : int * int) (end_pos : int * int) (t_list : t list) =
+  let t1 = find_tile start_pos end_pos t_list in
+  let rec move_aux t_list =
     match t_list with
     | [] -> []
     | h :: t ->
@@ -71,10 +83,6 @@ let move (t1 : t) (end_pos : int * int) (t_list : t list) =
   in
   if check_avail t1 end_pos (get_list_pos t_list) then move_aux t_list
   else failwith "Cannot move this tile due to overlapping."
-
-(*let check_for_word (t : t) (game_board : B.letter list list) = let board =
-  B.board_to_list game_board in let row = fst (t.position) in let col = snd
-  (t.position) in*)
 
 let move_on_board ((x1, y1) : B.coord) ((x2, y2) : B.coord)
     (board : B.letter list list) =
