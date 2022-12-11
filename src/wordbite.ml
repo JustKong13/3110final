@@ -1,5 +1,6 @@
 Random.self_init ()
 
+open Wordvalidator
 open Board
 open Tile
 module B = Board
@@ -102,7 +103,7 @@ let get_string_of_board (game_board : string list list) =
   ^ "___________________________________\n"
 
 (** [update_game_state] updates the game state on successful completion of a
-    word on the board*)
+    word on the board - this method is here for testing purposes only*)
 let update_game_state (word : string) (game_state : game) =
   if List.mem word game_state.words_found then game_state
   else
@@ -114,7 +115,21 @@ let update_game_state (word : string) (game_state : game) =
       tile_list = game_state.tile_list;
     }
 
+let update_game_with_new_word (word : string) (game_state : game) =
+  if List.mem word game_state.words_found then ()
+  else (
+    game_state.words_found <- word :: game_state.words_found;
+    game_state.score <- game_state.score + 1)
+
+let rec generate_list_of_words (row_in_string : string) =
+  row_in_string |> Str.split (Str.regexp "-")
+
+let rec create_string_of_row (row : string list) =
+  match row with
+  | [] -> ""
+  | h :: t -> h ^ create_string_of_row t
+
 (** [check_for_words] takes in [coords : int * int] and checks the respective
-    columns and rows for words*)
+    columns and rows for words. Updates the game state if the word is found*)
 let check_for_words ((x, y) : int * int) (game_state : game) =
   raise (Failure "Unimplemented")
