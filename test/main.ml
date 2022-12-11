@@ -90,10 +90,14 @@ let word_validator_tests =
 
 (*Wordbite.ml tests*)
 
-module W = Wordbite
+module W1 = Wordbite
+module W2 = Wordbite
 
-let init_game_state = W.init_game
+let init_game_state = W1.init_game
 let test_board = B.place_letter "a" (4, 4) b1
+let test1_game_state = W2.init_game
+let one_point = W2.update_game_state "asdf" test1_game_state
+let two_point = W2.update_game_state "abcd" one_point
 
 let wordbite_test =
   [
@@ -114,6 +118,11 @@ let wordbite_test =
         [ "-"; "-"; "-"; "-"; "-"; "-"; "-"; "-" ];
         [ "-"; "-"; "-"; "-"; "-"; "-"; "-"; "-" ];
       ];
+    test "testing game score 1 words found" one_point.score 1;
+    test "testing game state 1 words found" one_point.words_found [ "asdf" ];
+    test "testing game score 2 words found" two_point.score 2;
+    test "testing game state 2 words found" two_point.words_found
+      [ "abcd"; "asdf" ];
   ]
 
 let double_vowels = "aabcdeefghiijklmnoopqrstuuvwxyz"

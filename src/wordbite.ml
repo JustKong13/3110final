@@ -15,7 +15,7 @@ type game = {
 }
 
 let tile_list = T.tile_list
-let game_board = ref B.empty
+let game_board = B.empty
 
 let rec generate_game_board tile_list game_board =
   match tile_list with
@@ -47,7 +47,7 @@ let init_game =
     time_elapsed = 0.0;
     score = 0;
     words_found = [];
-    board = generate_game_board tile_list !game_board;
+    board = generate_game_board tile_list game_board;
     tile_list;
   }
 
@@ -100,3 +100,21 @@ let get_string_of_board (game_board : string list list) =
    ___________________________________  \n"
   ^ string_of_board game_board 0
   ^ "___________________________________\n"
+
+(** [update_game_state] updates the game state on successful completion of a
+    word on the board*)
+let update_game_state (word : string) (game_state : game) =
+  if List.mem word game_state.words_found then game_state
+  else
+    {
+      time_elapsed = game_state.time_elapsed;
+      score = game_state.score + 1;
+      words_found = word :: game_state.words_found;
+      board = game_state.board;
+      tile_list = game_state.tile_list;
+    }
+
+(** [check_for_words] takes in [coords : int * int] and checks the respective
+    columns and rows for words*)
+let check_for_words ((x, y) : int * int) (game_state : game) =
+  raise (Failure "Unimplemented")
