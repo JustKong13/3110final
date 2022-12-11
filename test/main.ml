@@ -123,6 +123,12 @@ let wordbite_test =
     test "testing game score 2 words found" two_point.score 2;
     test "testing game state 2 words found" two_point.words_found
       [ "abcd"; "asdf" ];
+    test "transforming row to string"
+      (create_string_of_row [ "-"; "-"; "-"; "a"; "-"; "a"; "b"; "c" ])
+      "---a-abc";
+    test "transforming empty row to string"
+      (create_string_of_row [ "-"; "-"; "-"; "-"; "-"; "-"; "-"; "-" ])
+      "--------";
   ]
 
 let double_vowels = "aabcdeefghiijklmnoopqrstuuvwxyz"

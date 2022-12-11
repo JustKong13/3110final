@@ -1,5 +1,6 @@
 build:
-	dune build
+	dune build src
+	dune build bin
 
 code:
 	-dune build
