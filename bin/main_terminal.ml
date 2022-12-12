@@ -116,9 +116,8 @@ let main () =
     \  2. Letters may be a (1 x 1) tile or a pair aligned vertically (2 x 1) \n\
     \     or horizontally (1 x 2). \n\n\
     \  3. To move a tile, type in two coordinates:\n\
-    \     1st coord: the tile you wish to move \n\
-    \     2nd coord: position you wish to move it to. \n\
-    \     To move tile pairs, use the leftmost or topmost coordinate. \n\
+    \     1st coord: the tile you wish to move (any part of it) \n\
+    \     2nd coord: position you wish to move it to. \n\n\
     \     Example: 1,2 3,4 moves tile at (1, 2) to (3, 4) \n\n\
     \  4. You may only move tiles to empty spaces on the board. \n\
     \     They cannot go out of bounds. \n\n\

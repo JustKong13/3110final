@@ -71,7 +71,9 @@ let check_avail (t : t) (new_space : int * int) (pos_list : (int * int) list) =
 
 let rec find_tile (start_pos : int * int) (t_list : t list) =
   match t_list with
-  | h :: t -> if h.position = start_pos then h else find_tile start_pos t
+  | h :: t ->
+      if h.position = start_pos || adjacent h h.position = start_pos then h
+      else find_tile start_pos t
   | [] -> raise TileNotFound
 
 let move (start_pos : int * int) (end_pos : int * int) (t_list : t list) =
