@@ -71,7 +71,7 @@ let letter_helper (t : t) =
   | _ -> t.tstring
 
 let tile_string (t : t) =
-  "string: " ^ letter_helper t ^ " | type: " ^ type_to_align t ^ " | pos: "
+  "[ string: " ^ letter_helper t ^ " | type: " ^ type_to_align t ^ " | pos: "
   ^ string_pos t ^ "]"
 
 let rec lst_string (lst : t list) =
