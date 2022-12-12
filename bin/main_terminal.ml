@@ -6,6 +6,7 @@ open Game.Tile
 
 exception InvalidString
 exception InvalidCoord
+exception TileNotFound
 
 module G = Game.Wordbite
 
@@ -25,7 +26,8 @@ let rec start_game input =
   print_endline
     "\n\
      Move a character to an empty spot (x1, y1) to (x2, y2) by typing (x1 y1) \
-     (x2 y2). When you are done, type 'quit'. ";
+     (x2 y2). When you are done, type 'quit'. To view which words you've \
+     already found, type 'found'";
   print_string "> ";
   match read_line () with
   | input -> parse_input input
@@ -33,9 +35,18 @@ let rec start_game input =
 and parse_input input =
   match input with
   | "quit" -> exit 0
+  | "found" ->
+      ANSITerminal.print_string []
+        ("Words Found: \n[\n " ^ get_words_found game_state.words_found ^ "\n]");
+      start_game input
   | input ->
       parse_coord input;
       start_game input
+
+and get_words_found (words_found : string list) =
+  match words_found with
+  | [] -> ""
+  | h :: t -> h ^ "\n " ^ get_words_found t
 
 and parse_coord s =
   try
@@ -48,12 +59,36 @@ and parse_coord s =
         game_state.tile_list
     in
     game_state.tile_list <- new_tlist;
-    game_state.board <- generate_game_board new_tlist B.empty
-  with Failure int_of_string ->
-    ANSITerminal.print_string [ ANSITerminal.red ]
-      "Your input was invalid. Please follow the format: \n  ";
-    ANSITerminal.print_string [ ANSITerminal.blue ]
-      "  (x1 y1) (x2 y2). Example: (1 2) (3 4)"
+    game_state.board <- generate_game_board new_tlist B.empty;
+    game_state.words_found <-
+      check_for_words
+        ( int_of_string (String.make 1 (String.get s 7)),
+          int_of_string (String.make 1 (String.get s 9)) )
+        game_state
+      @ check_for_words
+          ( int_of_string (String.make 1 (String.get s 7)),
+            int_of_string (String.make 1 (String.get s 9)) + 1 )
+          game_state
+      @ check_for_words
+          ( int_of_string (String.make 1 (String.get s 7)) + 1,
+            int_of_string (String.make 1 (String.get s 9)) )
+          game_state
+      @ game_state.words_found
+  with a -> (
+    match a with
+    | Invalid_argument _ ->
+        ANSITerminal.print_string [ ANSITerminal.red ]
+          "Your input was invalid. Please follow the format: \n  ";
+        ANSITerminal.print_string [ ANSITerminal.blue ]
+          "  (x1 y1) (x2 y2). Example: (1 2) (3 4)"
+    | TileNotFound ->
+        ANSITerminal.print_string [ ANSITerminal.red ]
+          "We could not find your tile \n"
+    | _ ->
+        ANSITerminal.print_string [ ANSITerminal.red ]
+          "Your input was invalid. Please follow the format: \n  ";
+        ANSITerminal.print_string [ ANSITerminal.blue ]
+          "  (x1 y1) (x2 y2). Example: (1 2) (3 4)")
 
 (** [play_game input] starts the Wordbite game if [input] is "start". *)
 let rec play_game input =

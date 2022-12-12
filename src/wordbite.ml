@@ -154,7 +154,7 @@ let rec get_col (x : int) (board : string list list) =
 
 (** [check_for_words] takes in [coords : int * int] and checks the respective
     columns and rows for words. Updates the game state if the word is found*)
-let check_for_words ((x, y) : int * int) (game_state : game) =
+let rec check_for_words ((x, y) : int * int) (game_state : game) =
   (get_row y (B.board_to_list game_state.board)
   |> create_string_of_row |> generate_list_of_words |> get_valid_words)
   @ (get_col x (B.board_to_list game_state.board)
