@@ -29,6 +29,9 @@ let pp_list pp_elt lst =
 let test name f expeceted_output =
   name >:: fun _ -> assert_equal f expeceted_output
 
+let test_exception name expected_exception exp =
+  name >:: fun _ -> assert_raises expected_exception exp
+
 module B = Board
 
 let b1 = B.empty
@@ -132,45 +135,54 @@ let wordbite_test =
 
 let double_vowels = "aabcdeefghiijklmnoopqrstuuvwxyz"
 
-(*let strings_test (name : string) (a_string : string) (acc : string list)
-  (expected_output : string list) : test = name >:: fun _ -> assert_equal
-  expected_output (strings a_string acc) ~printer:(pp_list pp_string) *)
-
-(*let strings_tests = [ strings_test "tests word list generator" double_vowels
-  [] [] ]*)
-
-(*Tile.ml tests*)
-(*let str_list = [ "dm"; "s"; "e"; "a"; "ng"; "bn"; "k"; "lj"; "en"; "ie" ];;
-  let t1 = create str_list [];; place t1 [];; *)
-
-(*let create_test (name : string) (input : string list) (expected_output :
-  Tile.t list) : test = name >:: fun _ -> assert_equal expected_output (create
-  str_list [])
-
-  let tile_tests = [ create_test "create tiles" str_list [] ]*)
-
 open Tile
 
 let list_of_tiles =
   [
     { tstring = "a"; ttype = ATile; position = (0, 0) };
-    { tstring = "s"; ttype = HTile; position = (7, 7) };
+    { tstring = "sa"; ttype = HTile; position = (7, 7) };
+    { tstring = "sa"; ttype = VTile; position = (5, 5) };
   ]
 
 let tile_tests =
   [
     test "finding tile loc 1"
       (find_tile (0, 0) list_of_tiles)
-      { tstring = "a"; ttype = ATile; position = (0, 0) };
+      ({ tstring = "a"; ttype = ATile; position = (0, 0) }, true);
     test "finding tile loc 2"
       (find_tile (7, 7) list_of_tiles)
-      { tstring = "s"; ttype = HTile; position = (7, 7) };
+      ({ tstring = "sa"; ttype = HTile; position = (7, 7) }, true);
+    test "finding adjacent tile of HTile"
+      (find_tile (8, 7) list_of_tiles)
+      ({ tstring = "sa"; ttype = HTile; position = (7, 7) }, false);
+    test "finding adjacent tile of VTile"
+      (find_tile (5, 6) list_of_tiles)
+      ({ tstring = "sa"; ttype = VTile; position = (5, 5) }, false);
+    test_exception "finding adjacent tile of HTile" (Failure "Tile not found")
+      (fun _ -> find_tile (7, 8) list_of_tiles);
     test "testing move 1"
       (move (0, 0) (2, 2) list_of_tiles)
       [
         { tstring = "a"; ttype = ATile; position = (2, 2) };
-        { tstring = "s"; ttype = HTile; position = (7, 7) };
+        { tstring = "sa"; ttype = HTile; position = (7, 7) };
+        { tstring = "sa"; ttype = VTile; position = (5, 5) };
       ];
+    test_exception "moving to overlap"
+      (Failure "Cannot move this tile due to overlapping.") (fun _ ->
+        move (0, 0) (7, 7) list_of_tiles);
+    test_exception "moving to overlap adjacent"
+      (Failure "Cannot move this tile due to overlapping.") (fun _ ->
+        move (0, 0) (8, 7) list_of_tiles);
+    test "moving next to a tile valid"
+      (move (0, 0) (7, 8) list_of_tiles)
+      [
+        { tstring = "a"; ttype = ATile; position = (7, 8) };
+        { tstring = "sa"; ttype = HTile; position = (7, 7) };
+        { tstring = "sa"; ttype = VTile; position = (5, 5) };
+      ];
+    test_exception "moving and then checking location of the original position"
+      (Failure "Tile not found") (fun _ ->
+        find_tile (0, 0) (move (0, 0) (2, 2) list_of_tiles));
   ]
 
 let tests =

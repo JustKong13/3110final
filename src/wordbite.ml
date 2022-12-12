@@ -75,7 +75,7 @@ let rec find_tile (start_pos : int * int) (t_list : t list) =
       if h.position = start_pos then (h, true)
       else if adjacent h h.position = start_pos then (h, false)
       else find_tile start_pos t
-  | [] -> raise TileNotFound
+  | [] -> failwith "Tile not found"
 
 let place_adjacent (t1 : t) (end_pos : int * int) =
   match t1.ttype with
