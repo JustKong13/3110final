@@ -9,7 +9,7 @@ module Board = struct
 
   type coord = int * int
   (** [coord] is a provided coordinate on the board where (x,y) is (0,0) at the
-      top leftmost position and (7,8) is the bottom right most position*)
+      top leftmost position and (8,7) is the bottom right most position*)
 
   (** [empty] returns the empty list*)
   let empty = List.init 9 (fun _ -> List.init 8 (fun _ -> None))
