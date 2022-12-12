@@ -72,15 +72,13 @@ let place_adjacent (t1 : t) (end_pos : int * int) =
       if snd end_pos - 1 > -1 then new_coords t1 (fst end_pos, snd end_pos - 1)
       else raise OutOfBound
 
-let check_avail (tpair : t * bool) (new_space : int * int)
+let check_overlap (tpair : t * bool) (new_space : int * int)
     (pos_list : (int * int) list) =
   match snd tpair with
   | true ->
       if
         List.mem new_space pos_list
         || List.mem (adjacent (fst tpair) new_space) pos_list
-        || fst new_space > max_x (fst tpair)
-        || snd new_space > max_y (fst tpair)
       then false
       else true
   | false ->
@@ -88,7 +86,20 @@ let check_avail (tpair : t * bool) (new_space : int * int)
       if
         List.mem new_tile.position pos_list
         || List.mem (adjacent new_tile new_tile.position) pos_list
-        || fst new_tile.position > max_x (fst tpair)
+      then false
+      else true
+
+let check_bounds (tpair : t * bool) (new_space : int * int)
+    (pos_list : (int * int) list) =
+  match snd tpair with
+  | true ->
+      if fst new_space > max_x (fst tpair) || snd new_space > max_y (fst tpair)
+      then false
+      else true
+  | false ->
+      let new_tile = place_adjacent (fst tpair) new_space in
+      if
+        fst new_tile.position > max_x (fst tpair)
         || snd new_tile.position > max_y (fst tpair)
       then false
       else true
@@ -113,8 +124,11 @@ let move (start_pos : int * int) (end_pos : int * int) (t_list : t list) =
           place_adjacent h end_pos :: move_aux t
         else h :: move_aux t
   in
-  if check_avail t1 end_pos (get_list_pos (fst t1) t_list) then move_aux t_list
-  else raise TileOverlap
+  if check_overlap t1 end_pos (get_list_pos (fst t1) t_list) = false then
+    raise TileOverlap
+  else if check_bounds t1 end_pos (get_list_pos (fst t1) t_list) = false then
+    raise OutOfBound
+  else move_aux t_list
 
 let move_on_board ((x1, y1) : B.coord) ((x2, y2) : B.coord)
     (board : B.letter list list) =
