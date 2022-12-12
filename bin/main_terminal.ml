@@ -109,7 +109,7 @@ let main () =
   ANSITerminal.print_string [ ANSITerminal.cyan ]
     "\n\n\
      ╔══════════════════════════*.·:·.✧ ✦ ✧.·:·.*════════════════════════════╗\n\
-    \                            Welcome to Wordbite!\n\n\
+    \                          Welcome to Wordbite!\n\n\
     \  How to play: \n\n\
     \  1. Create as many words as you can by moving tiles. \n\n\
     \  2. Letters may be a (1 x 1) tile or a pair aligned vertically (2 x 1) \n\
