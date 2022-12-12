@@ -19,8 +19,7 @@ let game_state =
   }
 
 let rec start_game input =
-  ANSITerminal.print_string [ ANSITerminal.blue ]
-    "\n\nHere is your starting board\n";
+  ANSITerminal.print_string [ ANSITerminal.blue ] "\n\nHere is your board\n";
   print_string (G.get_string_of_board (B.board_to_list game_state.board));
   print_endline ("\n" ^ lst_string game_state.tile_list);
   print_endline
@@ -29,9 +28,9 @@ let rec start_game input =
      (x2 y2). When you are done, type 'quit'. ";
   print_string "> ";
   match read_line () with
-  | input -> move_tiles input
+  | input -> parse_input input
 
-and move_tiles input =
+and parse_input input =
   match input with
   | "quit" -> exit 0
   | input ->
@@ -39,16 +38,22 @@ and move_tiles input =
       start_game input
 
 and parse_coord s =
-  let new_tlist =
-    G.move
-      ( int_of_string (String.make 1 (String.get s 1)),
-        int_of_string (String.make 1 (String.get s 3)) )
-      ( int_of_string (String.make 1 (String.get s 7)),
-        int_of_string (String.make 1 (String.get s 9)) )
-      game_state.tile_list
-  in
-  game_state.tile_list <- new_tlist;
-  game_state.board <- generate_game_board new_tlist B.empty
+  try
+    let new_tlist =
+      G.move
+        ( int_of_string (String.make 1 (String.get s 1)),
+          int_of_string (String.make 1 (String.get s 3)) )
+        ( int_of_string (String.make 1 (String.get s 7)),
+          int_of_string (String.make 1 (String.get s 9)) )
+        game_state.tile_list
+    in
+    game_state.tile_list <- new_tlist;
+    game_state.board <- generate_game_board new_tlist B.empty
+  with Failure int_of_string ->
+    ANSITerminal.print_string [ ANSITerminal.red ]
+      "Your input was invalid. Please follow the format: \n  ";
+    ANSITerminal.print_string [ ANSITerminal.blue ]
+      "  (x1 y1) (x2 y2). Example: (1 2) (3 4)"
 
 (** [play_game input] starts the Wordbite game if [input] is "start". *)
 let rec play_game input =
