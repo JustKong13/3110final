@@ -15,11 +15,11 @@ type game = {
   mutable tile_list : t list;
 }
 
-let tile_list = T.tile_list
+let tiles = T.tile_list
 let game_board = B.empty
 
-let rec generate_game_board tile_list game_board =
-  match tile_list with
+let rec generate_game_board tiles game_board =
+  match tiles with
   | [] -> game_board
   | h :: t -> begin
       match h.ttype with
@@ -49,7 +49,7 @@ let init_game =
     score = 0;
     words_found = [];
     board = generate_game_board tile_list game_board;
-    tile_list;
+    tile_list = tiles;
   }
 
 let rec get_list_pos (t_list : t list) =
@@ -66,15 +66,13 @@ let check_avail (t : t) (new_space : int * int) (pos_list : (int * int) list) =
   then false
   else true
 
-let rec find_tile (start_pos : int * int) (end_pos : int * int)
-    (t_list : t list) =
+let rec find_tile (start_pos : int * int) (t_list : t list) =
   match t_list with
+  | h :: t -> if h.position = start_pos then h else find_tile start_pos t
   | [] -> failwith "Tile not found!"
-  | h :: t ->
-      if h.position = start_pos then h else find_tile start_pos end_pos t
 
 let move (start_pos : int * int) (end_pos : int * int) (t_list : t list) =
-  let t1 = find_tile start_pos end_pos t_list in
+  let t1 = find_tile start_pos t_list in
   let rec move_aux t_list =
     match t_list with
     | [] -> []
