@@ -19,9 +19,9 @@ let game_state =
 
 let rec start_game input =
   ANSITerminal.print_string [ ANSITerminal.cyan ]
-    ("\n\nWords Found: \n╒════════════════╕\n"
+    ("\n\nWords Found: \n╒═════════════╕\n"
     ^ get_words_found game_state.words_found
-    ^ "\n╚════════════════╝");
+    ^ "\n╚═════════════╝");
   ANSITerminal.print_string [ ANSITerminal.cyan ]
     ("\n\nCurrent Score: " ^ string_of_int game_state.score);
   ANSITerminal.print_string [ ANSITerminal.cyan ] "\n\nCurrent Board:\n";
