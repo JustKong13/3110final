@@ -1,6 +1,7 @@
 build:
 	dune build src
 	dune build bin
+	dune build test
 
 code:
 	-dune build

@@ -7,6 +7,8 @@ module B = Board
 open Tile
 module T = Tile
 
+exception TileNotFound
+
 type game = {
   mutable time_elapsed : float;
   mutable score : int;
@@ -69,7 +71,7 @@ let check_avail (t : t) (new_space : int * int) (pos_list : (int * int) list) =
 let rec find_tile (start_pos : int * int) (t_list : t list) =
   match t_list with
   | h :: t -> if h.position = start_pos then h else find_tile start_pos t
-  | [] -> failwith "Tile not found!"
+  | [] -> raise TileNotFound
 
 let move (start_pos : int * int) (end_pos : int * int) (t_list : t list) =
   (*print_endline (string_of_int (fst start_pos) ^ string_of_int (snd
