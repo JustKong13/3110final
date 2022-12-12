@@ -72,9 +72,11 @@ let rec find_tile (start_pos : int * int) (t_list : t list) =
   | [] -> failwith "Tile not found!"
 
 let move (start_pos : int * int) (end_pos : int * int) (t_list : t list) =
+  (*print_endline (string_of_int (fst start_pos) ^ string_of_int (snd
+    start_pos)); print_endline (lst_string t_list); *)
   let t1 = find_tile start_pos t_list in
-  let rec move_aux t_list =
-    match t_list with
+  let rec move_aux a_list =
+    match a_list with
     | [] -> []
     | h :: t ->
         if h.position = t1.position then new_coords h end_pos :: move_aux t

@@ -66,10 +66,10 @@ let rec play_game input =
         print_string (G.get_string_of_board (B.board_to_list game_state.board));
         print_endline
           "\n\
-           Move a character to an empty spot (x1, y1) to (x2, y2) by typing \
-           (x1 y1) (x2 y2). When you are done, type 'quit'. ";
+           Move a character (x1, y1) to an empty spot (x2 y2) by typing (x1 \
+           y1) (x2 y2). When you are done, type 'quit'. ";
         print_string "> ";
-        print_endline ("\n" ^ lst_string game_state.tile_list);
+        print_endline ("TILES INFO:" ^ "\n" ^ lst_string game_state.tile_list);
         match read_line () with
         | input -> move_tiles input)
     | "quit" -> exit 0
