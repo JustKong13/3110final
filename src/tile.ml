@@ -62,8 +62,8 @@ let string_pos (t : t) =
 let type_to_align (t : t) =
   match t.ttype with
   | ATile -> "1 x 1"
-  | HTile -> "2 x 1"
-  | VTile -> "1 x 2"
+  | HTile -> "1 x 2"
+  | VTile -> "2 x 1"
 
 let letter_helper (t : t) =
   match t.ttype with

@@ -12,7 +12,6 @@ module G = Game.Wordbite
 
 let game_state =
   {
-    time_elapsed = 0.0;
     score = 0;
     words_found = [];
     board = generate_game_board tile_list game_board;
@@ -109,18 +108,22 @@ let rec play_game input =
 let main () =
   ANSITerminal.print_string [ ANSITerminal.cyan ]
     "\n\n\
-     Welcome to Wordbite.\n\n\
+     ╔══════════════════════════*.·:·.✧ ✦ ✧.·:·.*════════════════════════════╗\n\
+    \                            Welcome to Wordbite!\n\n\
     \  How to play: \n\n\
     \  1. Create as many words as you can by moving tiles. \n\n\
-    \  2. Letters may be a (1x1) tile or a pair aligned vertically (1x2) or \
-     horizontally (2x1). \n\n\
-    \  3. To move a tile, type in two coordinates: the tile you wish to move, \
-     and where you wish to move it. To move tile pairs, use the leftmost or \
-     topmost coordinate. Example: (1 2) (3 4) \n\n\
-    \  4. You may only move tiles to empty spaces on the board and they cannot \
-     go out of bounds. \n\n\
+    \  2. Letters may be a (1 x 1) tile or a pair aligned vertically (2 x 1) \n\
+    \     or horizontally (1 x 2). \n\n\
+    \  3. To move a tile, type in two coordinates:\n\
+    \     1st coord: the tile you wish to move \n\
+    \     2nd coord: position you wish to move it to. \n\
+    \     To move tile pairs, use the leftmost or topmost coordinate. \n\
+    \     Example: (1 2) (3 4) moves tile at (1, 2) to (3, 4)\n\n\
+    \  4. You may only move tiles to empty spaces on the board. \n\
+    \     They cannot go out of bounds. \n\n\
     \  5. Type 'quit' when done!\n\n\
-    \  ";
+     ╚══════════════════════════*.·:·.✧ ✦ ✧.·:·.*════════════════════════════╝\n\
+    \ ";
   print_endline "Please type \'start\' to start the game.\n";
   print_string "> ";
   match read_line () with

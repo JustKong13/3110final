@@ -11,7 +11,6 @@ module T = Tile
 exception TileNotFound
 
 type game = {
-  mutable time_elapsed : float;
   mutable score : int;
   mutable words_found : string list;
   mutable board : B.letter list list;
@@ -48,7 +47,6 @@ let rec generate_game_board tiles game_board =
 
 let init_game =
   {
-    time_elapsed = 0.0;
     score = 0;
     words_found = [];
     board = generate_game_board tile_list game_board;
@@ -117,7 +115,6 @@ let update_game_state (word : string) (game_state : game) =
   if List.mem word game_state.words_found then game_state
   else
     {
-      time_elapsed = game_state.time_elapsed;
       score = game_state.score + 1;
       words_found = word :: game_state.words_found;
       board = game_state.board;
