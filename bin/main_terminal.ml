@@ -18,23 +18,17 @@ let game_state =
     tile_list = tiles;
   }
 
-let parse_coord s =
-  game_state.tile_list <-
+let rec parse_coord s =
+  let new_tlist =
     G.move
       ( int_of_string (String.make 1 (String.get s 1)),
         int_of_string (String.make 1 (String.get s 3)) )
       ( int_of_string (String.make 1 (String.get s 7)),
         int_of_string (String.make 1 (String.get s 9)) )
-      game_state.tile_list;
-  game_state.board <-
-    generate_game_board
-      (G.move
-         ( int_of_string (String.make 1 (String.get s 1)),
-           int_of_string (String.make 1 (String.get s 3)) )
-         ( int_of_string (String.make 1 (String.get s 7)),
-           int_of_string (String.make 1 (String.get s 9)) )
-         game_state.tile_list)
-      game_state.board
+      game_state.tile_list
+  in
+  game_state.tile_list <- new_tlist;
+  game_state.board <- generate_game_board new_tlist game_state.board
 
 (** [parse_input s words] parses [s] checking if it is made up of strings from
     [words] and checks whether [s] is a real word, otherwise prompts the user
@@ -50,6 +44,7 @@ let rec move_tiles input =
   match input with
   | "quit" -> exit 0
   | input -> parse_coord input
+
 (* | _ -> raise InvalidCoord with InvalidCoord -> ( ANSITerminal.print_string [
    ANSITerminal.red ] "\nThis input is not valid"; print_endline "\n\ Move a
    character to an empty spot (x1, y1) to (x2, y2) by typing (x1 \ y1) (x2 y2).
