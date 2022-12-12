@@ -19,14 +19,17 @@ let game_state =
   }
 
 let rec start_game input =
+  ANSITerminal.print_string []
+    ("Words Found: \n[\n " ^ get_words_found game_state.words_found ^ "]");
+  ANSITerminal.print_string []
+    ("Current Score: " ^ string_of_int game_state.score);
   ANSITerminal.print_string [ ANSITerminal.blue ] "\n\nHere is your board\n";
   print_string (G.get_string_of_board (B.board_to_list game_state.board));
   print_endline ("\n" ^ lst_string game_state.tile_list);
   print_endline
     "\n\
      Move a character to an empty spot (x1, y1) to (x2, y2) by typing (x1 y1) \
-     (x2 y2). When you are done, type 'quit'. To view which words you've \
-     already found, type 'found'";
+     (x2 y2). When you are done, type 'quit'. ";
   print_string "> ";
   match read_line () with
   | input -> parse_input input
@@ -34,10 +37,6 @@ let rec start_game input =
 and parse_input input =
   match input with
   | "quit" -> exit 0
-  | "found" ->
-      ANSITerminal.print_string []
-        ("Words Found: \n[\n " ^ get_words_found game_state.words_found ^ "\n]");
-      start_game input
   | input ->
       parse_coord input;
       start_game input
@@ -59,11 +58,11 @@ and parse_coord s =
     in
     game_state.tile_list <- new_tlist;
     game_state.board <- generate_game_board new_tlist B.empty;
-    game_state.words_found <-
-      check_for_words
-        ( int_of_string (String.make 1 (String.get s 7)),
-          int_of_string (String.make 1 (String.get s 9)) )
-        game_state
+    new_move
+      (check_for_words
+         ( int_of_string (String.make 1 (String.get s 7)),
+           int_of_string (String.make 1 (String.get s 9)) )
+         game_state
       @ check_for_words
           ( int_of_string (String.make 1 (String.get s 7)),
             int_of_string (String.make 1 (String.get s 9)) + 1 )
@@ -71,8 +70,8 @@ and parse_coord s =
       @ check_for_words
           ( int_of_string (String.make 1 (String.get s 7)) + 1,
             int_of_string (String.make 1 (String.get s 9)) )
-          game_state
-      @ game_state.words_found
+          game_state)
+      game_state
   with a -> (
     match a with
     | Invalid_argument _ ->
