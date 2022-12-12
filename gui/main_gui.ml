@@ -42,7 +42,10 @@ and turn_handler_swap (g : Wordbite.game) (initial_coords : int * int) () =
   let event = wait_next_event [ Key_pressed ] in
   match event.key with
   | 'q' | 'Q' -> exit_game ()
-  | 's' | 'S' ->
+  (* escape key *)
+  | '\027' -> turn_handler g ()
+  (* space key *)
+  | '\032' ->
       moveto event.mouse_x event.mouse_y;
       let new_coords = Gui.get_board_coords (event.mouse_x, event.mouse_y) in
       if check_bounds new_coords then
@@ -59,17 +62,25 @@ and turn_handler_swap (g : Wordbite.game) (initial_coords : int * int) () =
       else turn_handler_swap g initial_coords ()
   | _ -> turn_handler_swap g initial_coords ()
 
-(** [game_handler] handles player input to play and quit the game. *)
-let rec game_handler () =
-  let event = wait_next_event [ Key_pressed ] in
-  match event.key with
-  | 'q' | 'Q' -> exit_game ()
-  | 'p' | 'P' ->
-      let g = Wordbite.init_game in
-      Gui.draw_game g ();
-      Gui.draw_none_selection ();
-      turn_handler g ()
-  | _ -> game_handler ()
+(** [title_handler] handles player mouse input to play, read the instructions,
+    and quit the game. *)
+let rec title_handler title_dims () =
+  let event = wait_next_event [ Button_down ] in
+  match event.button with
+  | true -> (
+      match title_dims with
+      | pl, pr, pt, pb, ql, qr, qt, qb ->
+          let x = event.mouse_x in
+          let y = event.mouse_y in
+          if x >= pl && x <= pr && y <= pt && y >= pb then (
+            let g = Wordbite.init_game in
+            clear_graph ();
+            Gui.draw_game g ();
+            Gui.draw_none_selection ();
+            turn_handler g ())
+          else if x >= ql && x <= qr && y <= qt && y >= qb then exit_game ()
+          else title_handler title_dims ())
+  | false -> title_handler title_dims ()
 
 (** [play_game] starts the game if the player types ["start"] in the terminal. *)
 let rec play_game () =
@@ -79,8 +90,8 @@ let rec play_game () =
     let input = String.lowercase_ascii (read_line ()) in
     match input with
     | "start" ->
-        Gui.create_window ();
-        game_handler ()
+        let title_dims = Gui.create_window () in
+        title_handler title_dims ()
     | _ -> raise InvalidString
   with InvalidString ->
     ANSITerminal.print_string [ ANSITerminal.red ]

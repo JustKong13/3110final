@@ -81,8 +81,29 @@ let draw_game (g : Wordbite.game) () =
   draw_all_letters g ()
 
 let draw_title_screen () =
-  draw_string "Press \'p\' to start the game";
-  draw_string "Press \'q\' to quit"
+  set_font "-*-fixed-medium-r-semicondensed--75-*-*-*-*-*-iso8859-1";
+  let title_dim = text_size "Wordbites" in
+  moveto ((size_x () / 2) - (fst title_dim / 2)) ((size_y () / 2) + 120);
+  draw_string "Wordbites";
+  set_font "-*-fixed-medium-r-semicondensed--50-*-*-*-*-*-iso8859-1";
+  let play_dim = text_size "Play" in
+  moveto ((size_x () / 2) - (fst play_dim / 2)) ((size_y () / 2) - 20);
+  draw_string "Play";
+  let instructions_dim = text_size "Instructions" in
+  moveto ((size_x () / 2) - (fst instructions_dim / 2)) ((size_y () / 2) - 120);
+  draw_string "Instructions";
+  let quit_dim = text_size "Quit" in
+  moveto ((size_x () / 2) - (fst quit_dim / 2)) ((size_y () / 2) - 220);
+  draw_string "Quit";
+  let play_l = (size_x () / 2) - (fst play_dim / 2) in
+  let play_r = (size_x () / 2) + (fst play_dim / 2) in
+  let play_t = (size_y () / 2) - 20 + snd play_dim in
+  let play_b = (size_y () / 2) - 20 in
+  let quit_l = (size_x () / 2) - (fst quit_dim / 2) in
+  let quit_r = (size_x () / 2) + (fst quit_dim / 2) in
+  let quit_t = (size_y () / 2) - 220 + snd quit_dim in
+  let quit_b = (size_y () / 2) - 220 in
+  (play_l, play_r, play_t, play_b, quit_l, quit_r, quit_t, quit_b)
 
 let create_window =
   open_graph "";
