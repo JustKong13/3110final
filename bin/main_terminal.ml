@@ -19,11 +19,13 @@ let game_state =
   }
 
 let rec start_game input =
-  ANSITerminal.print_string []
-    ("Words Found: \n[\n " ^ get_words_found game_state.words_found ^ "]");
-  ANSITerminal.print_string []
-    ("Current Score: " ^ string_of_int game_state.score);
-  ANSITerminal.print_string [ ANSITerminal.blue ] "\n\nHere is your board\n";
+  ANSITerminal.print_string [ ANSITerminal.cyan ]
+    ("Words Found: \n╒════════════════╕"
+    ^ get_words_found game_state.words_found
+    ^ "\n\n╚════════════════╝");
+  ANSITerminal.print_string [ ANSITerminal.cyan ]
+    ("\n\nCurrent Score: " ^ string_of_int game_state.score);
+  ANSITerminal.print_string [ ANSITerminal.cyan ] "\n\nCurrent Board:\n";
   print_string (G.get_string_of_board (B.board_to_list game_state.board));
   print_endline ("\n" ^ lst_string game_state.tile_list);
   print_endline

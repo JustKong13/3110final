@@ -16,7 +16,7 @@ let valid_words : string list =
 let rec is_valid_word word_list word =
   match word_list with
   | [] -> false
-  | h :: _ when h = word -> true
+  | h :: _ when h = word && String.length h > 2 -> true
   | _ :: t -> is_valid_word t word
 
 let check_word word = is_valid_word valid_words (word ^ "\r")
