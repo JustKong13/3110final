@@ -65,8 +65,8 @@ let tile_string (t : t) =
 
 let rec lst_string (lst : t list) =
   match lst with
-  | [] -> []
-  | h :: t -> tile_string h :: lst_string t
+  | [] -> ""
+  | h :: t -> tile_string h ^ "\n" ^ lst_string t
 
 let get_x pair =
   match pair with
