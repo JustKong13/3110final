@@ -9,6 +9,8 @@ open Tile
 module T = Tile
 
 exception TileNotFound
+exception OutOfBound
+exception TileOverlap
 
 type game = {
   mutable score : int;
@@ -65,10 +67,10 @@ let place_adjacent (t1 : t) (end_pos : int * int) =
   | ATile -> new_coords t1 end_pos
   | HTile ->
       if fst end_pos - 1 > -1 then new_coords t1 (fst end_pos - 1, snd end_pos)
-      else failwith "Out of bounds!"
+      else raise OutOfBound
   | VTile ->
       if snd end_pos - 1 > -1 then new_coords t1 (fst end_pos, snd end_pos - 1)
-      else failwith "Out of bounds!"
+      else raise OutOfBound
 
 let check_avail (tpair : t * bool) (new_space : int * int)
     (pos_list : (int * int) list) =
@@ -112,15 +114,15 @@ let move (start_pos : int * int) (end_pos : int * int) (t_list : t list) =
         else h :: move_aux t
   in
   if check_avail t1 end_pos (get_list_pos (fst t1) t_list) then move_aux t_list
-  else failwith "Cannot move this tile due to overlapping."
+  else raise TileOverlap
 
 let move_on_board ((x1, y1) : B.coord) ((x2, y2) : B.coord)
     (board : B.letter list list) =
-  if B.is_empty (x1, y1) board then raise (Failure "Letter not found")
+  if B.is_empty (x1, y1) board then raise TileNotFound
   else if B.is_empty (x2, y2) board then
     let removed_letter_board = B.remove_letter (x1, y1) board in
     B.place_letter (B.get_letter (x1, y1) board) (x2, y2) removed_letter_board
-  else raise (Failure "Position is occupied")
+  else raise TileOverlap
 
 let rec row_to_string (row : string list) =
   match row with

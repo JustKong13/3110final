@@ -6,7 +6,6 @@ open Game.Tile
 
 exception InvalidString
 exception InvalidCoord
-exception TileNotFound
 
 module G = Game.Wordbite
 
@@ -78,17 +77,21 @@ and parse_coord s =
     match a with
     | Invalid_argument _ ->
         ANSITerminal.print_string [ ANSITerminal.red ]
-          "Your input was invalid. Please follow the format: \n  ";
+          "Your input was invalid. Please follow this format: \n  ";
         ANSITerminal.print_string [ ANSITerminal.blue ]
           "  x1,y1 x2,y2. Example: 1,2 3,4"
     | TileNotFound ->
         ANSITerminal.print_string [ ANSITerminal.red ]
-          "We could not find your tile \n"
+          "You selected an empty tile. \n"
+    | OutOfBound ->
+        ANSITerminal.print_string [ ANSITerminal.red ]
+          "Your tile placement is out of bounds. \n"
+    | TileOverlap ->
+        ANSITerminal.print_string [ ANSITerminal.red ]
+          "Your tile placement overlaps another tile. \n"
     | _ ->
         ANSITerminal.print_string [ ANSITerminal.red ]
-          "Your input was invalid. Please follow the format: \n  ";
-        ANSITerminal.print_string [ ANSITerminal.blue ]
-          "  x1,y1 x2,y2. Example: 1,2 3,4")
+          "Something else went wrong...  ")
 
 (** [play_game input] starts the Wordbite game if [input] is "start". *)
 let rec play_game input =
