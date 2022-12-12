@@ -60,23 +60,6 @@ let rec get_list_pos (t1 : t) (t_list : t list) =
       if h = t1 then get_list_pos t1 t
       else h.position :: adjacent h h.position :: get_list_pos t1 t
 
-let check_avail (t : t) (new_space : int * int) (pos_list : (int * int) list) =
-  if
-    List.mem new_space pos_list
-    || List.mem (adjacent t new_space) pos_list
-    || fst new_space > max_x t
-    || snd new_space > max_y t
-  then false
-  else true
-
-let rec find_tile (start_pos : int * int) (t_list : t list) =
-  match t_list with
-  | h :: t ->
-      if h.position = start_pos then (h, true)
-      else if adjacent h h.position = start_pos then (h, false)
-      else find_tile start_pos t
-  | [] -> raise TileNotFound
-
 let place_adjacent (t1 : t) (end_pos : int * int) =
   match t1.ttype with
   | ATile -> new_coords t1 end_pos
@@ -86,6 +69,35 @@ let place_adjacent (t1 : t) (end_pos : int * int) =
   | VTile ->
       if snd end_pos - 1 > -1 then new_coords t1 (fst end_pos, snd end_pos - 1)
       else failwith "Out of bounds!"
+
+let check_avail (tpair : t * bool) (new_space : int * int)
+    (pos_list : (int * int) list) =
+  match snd tpair with
+  | true ->
+      if
+        List.mem new_space pos_list
+        || List.mem (adjacent (fst tpair) new_space) pos_list
+        || fst new_space > max_x (fst tpair)
+        || snd new_space > max_y (fst tpair)
+      then false
+      else true
+  | false ->
+      let new_tile = place_adjacent (fst tpair) new_space in
+      if
+        List.mem new_tile.position pos_list
+        || List.mem (adjacent new_tile new_tile.position) pos_list
+        || fst new_tile.position > max_x (fst tpair)
+        || snd new_tile.position > max_y (fst tpair)
+      then false
+      else true
+
+let rec find_tile (start_pos : int * int) (t_list : t list) =
+  match t_list with
+  | h :: t ->
+      if h.position = start_pos then (h, true)
+      else if adjacent h h.position = start_pos then (h, false)
+      else find_tile start_pos t
+  | [] -> raise TileNotFound
 
 let move (start_pos : int * int) (end_pos : int * int) (t_list : t list) =
   let t1 = find_tile start_pos t_list in
@@ -99,8 +111,7 @@ let move (start_pos : int * int) (end_pos : int * int) (t_list : t list) =
           place_adjacent h end_pos :: move_aux t
         else h :: move_aux t
   in
-  if check_avail (fst t1) end_pos (get_list_pos (fst t1) t_list) then
-    move_aux t_list
+  if check_avail t1 end_pos (get_list_pos (fst t1) t_list) then move_aux t_list
   else failwith "Cannot move this tile due to overlapping."
 
 let move_on_board ((x1, y1) : B.coord) ((x2, y2) : B.coord)
