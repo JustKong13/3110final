@@ -11,65 +11,76 @@ let exit_game () =
   exit 0
 
 (** [check_bounds pair] returns if the tuple [pair] is valid. A [pair] is valid
-    if x >= 0 && x <= 8 && y >= 0 && y <= 7. *)
+    if x >= 0 && x <= && y >= 0 && y <= 8. *)
 let check_bounds pair =
-  fst pair >= 0 && fst pair <= 8 && snd pair >= 0 && snd pair <= 7
+  fst pair >= 0 && fst pair <= 7 && snd pair >= 0 && snd pair <= 8
 
 (** [turn_handler g] handles player input to select a tile and make changes to
     the board. *)
 let rec turn_handler (g : Wordbite.game) () =
-  let event = wait_next_event [ Button_down; Key_pressed ] in
-  match (event.keypressed, event.button) with
-  | true, _ -> (
-      match event.key with
-      | 'q' | 'Q' -> exit_game ()
-      | _ -> turn_handler g ())
-  | false, true -> (
-      match event.button with
-      | true ->
-          clear_graph ();
-          Gui.draw_game g ();
-          Gui.draw_selected_tile (event.mouse_x, event.mouse_y) ();
-          let coords = Gui.get_board_coords (event.mouse_x, event.mouse_y) in
-          if check_bounds coords then turn_handler_swap g coords ()
-          else turn_handler g ()
-      | false -> turn_handler g ())
-  | _ -> turn_handler g ()
+  let event = wait_next_event [ Button_down ] in
+  match event.button with
+  | true ->
+      let coords = Gui.get_board_coords (event.mouse_x, event.mouse_y) in
+      if check_bounds coords then (
+        clear_graph ();
+        Gui.draw_game g ();
+        Gui.draw_selected_tile (event.mouse_x, event.mouse_y) ();
+        turn_handler_place g coords ())
+      else turn_handler g ()
+  | false -> turn_handler g ()
 
-(** [turn_handler_swap g] handles swapping tiles between the selected tile and
-    the curernt tile that the player is hovering over. *)
-and turn_handler_swap (g : Wordbite.game) (initial_coords : int * int) () =
+(** [turn_handler_place g initial_coords] places the tiles associated with
+    [initial_coords] onto a valid empty space on the board. *)
+and turn_handler_place (g : Wordbite.game) (initial_coords : int * int) () =
   let event = wait_next_event [ Key_pressed ] in
   match event.key with
-  | 'q' | 'Q' -> exit_game ()
   (* escape key *)
-  | '\027' -> turn_handler g ()
+  | '\027' ->
+      clear_graph ();
+      Gui.draw_game g ();
+      Gui.draw_none_selection ();
+      turn_handler g ()
   (* space key *)
   | '\032' ->
       moveto event.mouse_x event.mouse_y;
-      let new_coords = Gui.get_board_coords (event.mouse_x, event.mouse_y) in
-      if check_bounds new_coords then
+      let hovered_coords =
+        Gui.get_board_coords (event.mouse_x, event.mouse_y)
+      in
+      if check_bounds hovered_coords then
         try
-          let new_board =
-            Wordbite.move_on_board initial_coords new_coords g.board
+          let new_tile_lst =
+            Wordbite.move initial_coords hovered_coords g.tile_list
           in
-          let new_g = { g with board = new_board } in
+          let new_board =
+            Wordbite.generate_game_board new_tile_lst Board.empty
+          in
+          let new_g = g in
+          new_g.tile_list <- new_tile_lst;
+          new_g.board <- new_board;
+          Wordbite.new_move
+            (Wordbite.check_for_words hovered_coords new_g)
+            new_g;
           clear_graph ();
           Gui.draw_game new_g ();
           Gui.draw_none_selection ();
           turn_handler new_g ()
-        with Failure _ -> turn_handler_swap g initial_coords ()
-      else turn_handler_swap g initial_coords ()
-  | _ -> turn_handler_swap g initial_coords ()
+        with Failure _ -> turn_handler_place g initial_coords ()
+      else turn_handler_place g initial_coords ()
+  | _ -> turn_handler_place g initial_coords ()
 
-(** [title_handler] handles player mouse input to play, read the instructions,
-    and quit the game. *)
-let rec title_handler title_dims () =
+let rec instr_handler () = instr_handler ()
+
+(** [title_handler title_dimensions] handles player mouse input to play, read
+    the instructions, or quit the game. [title_dimensions] contains the centered
+    left, right, top, and bottom coordinates of the texts:
+    ["Play"],["Instructions"], and ["Quit"] on the title screen.*)
+let rec title_handler title_dimensions () =
   let event = wait_next_event [ Button_down ] in
   match event.button with
   | true -> (
-      match title_dims with
-      | pl, pr, pt, pb, ql, qr, qt, qb ->
+      match title_dimensions with
+      | pl, pr, pt, pb, il, ir, it, ib, ql, qr, qt, qb ->
           let x = event.mouse_x in
           let y = event.mouse_y in
           if x >= pl && x <= pr && y <= pt && y >= pb then (
@@ -78,9 +89,13 @@ let rec title_handler title_dims () =
             Gui.draw_game g ();
             Gui.draw_none_selection ();
             turn_handler g ())
+          else if x >= il && x <= ir && y <= it && y >= ib then (
+            clear_graph ();
+            Gui.draw_instructions ();
+            instr_handler ())
           else if x >= ql && x <= qr && y <= qt && y >= qb then exit_game ()
-          else title_handler title_dims ())
-  | false -> title_handler title_dims ()
+          else title_handler title_dimensions ())
+  | false -> title_handler title_dimensions ()
 
 (** [play_game] starts the game if the player types ["start"] in the terminal. *)
 let rec play_game () =
@@ -90,8 +105,8 @@ let rec play_game () =
     let input = String.lowercase_ascii (read_line ()) in
     match input with
     | "start" ->
-        let title_dims = Gui.create_window () in
-        title_handler title_dims ()
+        let title_dimensions = Gui.create_window () in
+        title_handler title_dimensions ()
     | _ -> raise InvalidString
   with InvalidString ->
     ANSITerminal.print_string [ ANSITerminal.red ]
