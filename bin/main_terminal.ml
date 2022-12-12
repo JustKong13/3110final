@@ -20,9 +20,9 @@ let game_state =
 
 let rec start_game input =
   ANSITerminal.print_string [ ANSITerminal.cyan ]
-    ("Words Found: \n╒════════════════╕"
+    ("\n\nWords Found: \n╒════════════════╕\n\n"
     ^ get_words_found game_state.words_found
-    ^ "\n\n╚════════════════╝");
+    ^ "\n" ^ "\n\n╚════════════════╝");
   ANSITerminal.print_string [ ANSITerminal.cyan ]
     ("\n\nCurrent Score: " ^ string_of_int game_state.score);
   ANSITerminal.print_string [ ANSITerminal.cyan ] "\n\nCurrent Board:\n";
@@ -30,8 +30,8 @@ let rec start_game input =
   print_endline ("\n" ^ lst_string game_state.tile_list);
   print_endline
     "\n\
-     Move a character to an empty spot (x1, y1) to (x2, y2) by typing (x1 y1) \
-     (x2 y2). When you are done, type 'quit'. ";
+     Move a tile (x1, y1) to an empty spot (x2, y2) by typing x1,y1 x2,y2. \
+     When you are done, type 'quit'. ";
   print_string "> ";
   match read_line () with
   | input -> parse_input input
@@ -52,26 +52,26 @@ and parse_coord s =
   try
     let new_tlist =
       G.move
-        ( int_of_string (String.make 1 (String.get s 1)),
-          int_of_string (String.make 1 (String.get s 3)) )
-        ( int_of_string (String.make 1 (String.get s 7)),
-          int_of_string (String.make 1 (String.get s 9)) )
+        ( int_of_string (String.make 1 (String.get s 0)),
+          int_of_string (String.make 1 (String.get s 2)) )
+        ( int_of_string (String.make 1 (String.get s 4)),
+          int_of_string (String.make 1 (String.get s 6)) )
         game_state.tile_list
     in
     game_state.tile_list <- new_tlist;
     game_state.board <- generate_game_board new_tlist B.empty;
     new_move
       (check_for_words
-         ( int_of_string (String.make 1 (String.get s 7)),
-           int_of_string (String.make 1 (String.get s 9)) )
+         ( int_of_string (String.make 1 (String.get s 4)),
+           int_of_string (String.make 1 (String.get s 6)) )
          game_state
       @ check_for_words
-          ( int_of_string (String.make 1 (String.get s 7)),
-            int_of_string (String.make 1 (String.get s 9)) + 1 )
+          ( int_of_string (String.make 1 (String.get s 4)),
+            int_of_string (String.make 1 (String.get s 6)) + 1 )
           game_state
       @ check_for_words
-          ( int_of_string (String.make 1 (String.get s 7)) + 1,
-            int_of_string (String.make 1 (String.get s 9)) )
+          ( int_of_string (String.make 1 (String.get s 4)) + 1,
+            int_of_string (String.make 1 (String.get s 6)) )
           game_state)
       game_state
   with a -> (
@@ -80,7 +80,7 @@ and parse_coord s =
         ANSITerminal.print_string [ ANSITerminal.red ]
           "Your input was invalid. Please follow the format: \n  ";
         ANSITerminal.print_string [ ANSITerminal.blue ]
-          "  (x1 y1) (x2 y2). Example: (1 2) (3 4)"
+          "  x1,y1 x2,y2. Example: 1,2 3,4"
     | TileNotFound ->
         ANSITerminal.print_string [ ANSITerminal.red ]
           "We could not find your tile \n"
@@ -88,7 +88,7 @@ and parse_coord s =
         ANSITerminal.print_string [ ANSITerminal.red ]
           "Your input was invalid. Please follow the format: \n  ";
         ANSITerminal.print_string [ ANSITerminal.blue ]
-          "  (x1 y1) (x2 y2). Example: (1 2) (3 4)")
+          "  x1,y1 x2,y2. Example: 1,2 3,4")
 
 (** [play_game input] starts the Wordbite game if [input] is "start". *)
 let rec play_game input =
@@ -119,7 +119,7 @@ let main () =
     \     1st coord: the tile you wish to move \n\
     \     2nd coord: position you wish to move it to. \n\
     \     To move tile pairs, use the leftmost or topmost coordinate. \n\
-    \     Example: (1 2) (3 4) moves tile at (1, 2) to (3, 4)\n\n\
+    \     Example: 1,2 3,4 moves tile at (1, 2) to (3, 4) \n\n\
     \  4. You may only move tiles to empty spaces on the board. \n\
     \     They cannot go out of bounds. \n\n\
     \  5. Type 'quit' when done!\n\n\

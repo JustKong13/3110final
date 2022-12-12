@@ -53,10 +53,12 @@ let init_game =
     tile_list = tiles;
   }
 
-let rec get_list_pos (t_list : t list) =
+let rec get_list_pos (t1 : t) (t_list : t list) =
   match t_list with
   | [] -> []
-  | h :: t -> h.position :: adjacent h h.position :: get_list_pos t
+  | h :: t ->
+      if h = t1 then get_list_pos t1 t
+      else h.position :: adjacent h h.position :: get_list_pos t1 t
 
 let check_avail (t : t) (new_space : int * int) (pos_list : (int * int) list) =
   if
@@ -81,7 +83,7 @@ let move (start_pos : int * int) (end_pos : int * int) (t_list : t list) =
         if h.position = t1.position then new_coords h end_pos :: move_aux t
         else h :: move_aux t
   in
-  if check_avail t1 end_pos (get_list_pos t_list) then move_aux t_list
+  if check_avail t1 end_pos (get_list_pos t1 t_list) then move_aux t_list
   else failwith "Cannot move this tile due to overlapping."
 
 let move_on_board ((x1, y1) : B.coord) ((x2, y2) : B.coord)
@@ -125,7 +127,8 @@ let rec update_score (old_score : int) (found : string list) =
   match found with
   | [] -> old_score
   | h :: t ->
-      if length h = 3 then update_score (old_score + 100) t
+      if length h = 2 then update_score (old_score + 0) t
+      else if length h = 3 then update_score (old_score + 100) t
       else if length h = 4 then update_score (old_score + 400) t
       else if length h = 5 then update_score (old_score + 800) t
       else if length h = 6 then update_score (old_score + 1400) t
@@ -136,9 +139,10 @@ let rec new_move (found : string list) (game_state : game) =
   match found with
   | [] -> ()
   | h :: t ->
-      if List.mem h game_state.words_found then new_move t game_state
+      if List.mem h game_state.words_found || length h < 3 then
+        new_move t game_state
       else game_state.words_found <- h :: game_state.words_found;
-      game_state.score <- update_score game_state.score game_state.words_found;
+      game_state.score <- update_score game_state.score found;
       new_move t game_state
 
 let rec get_valid_words (word_list : string list) =

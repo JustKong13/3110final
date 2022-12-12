@@ -72,7 +72,7 @@ let letter_helper (t : t) =
 
 let tile_string (t : t) =
   "[ string: " ^ letter_helper t ^ " | type: " ^ type_to_align t ^ " | pos: "
-  ^ string_pos t ^ "]"
+  ^ string_pos t ^ " ]"
 
 let rec lst_string (lst : t list) =
   match lst with
