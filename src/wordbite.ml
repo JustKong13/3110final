@@ -140,17 +140,19 @@ let update_game_state (word : string) (game_state : game) =
       tile_list = game_state.tile_list;
     }
 
-let rec update_score (old_score : int) (found : string list) =
-  match found with
-  | [] -> old_score
-  | h :: t ->
-      if length h = 2 then update_score (old_score + 0) t
-      else if length h = 3 then update_score (old_score + 100) t
-      else if length h = 4 then update_score (old_score + 400) t
-      else if length h = 5 then update_score (old_score + 800) t
-      else if length h = 6 then update_score (old_score + 1400) t
-      else if length h = 7 then update_score (old_score + 1800) t
-      else update_score (old_score + 2200) t
+let calc_score (h : string) =
+  if length h = 2 then 0
+  else if length h = 3 then 100
+  else if length h = 4 then 400
+  else if length h = 5 then 800
+  else if length h = 6 then 1400
+  else if length h = 7 then 1800
+  else 2200
+
+let rec update_score (word_list : string list) =
+  match word_list with
+  | [] -> 0
+  | h :: t -> calc_score h + update_score t
 
 let rec new_move (found : string list) (game_state : game) =
   match found with
@@ -159,7 +161,7 @@ let rec new_move (found : string list) (game_state : game) =
       if List.mem h game_state.words_found || length h < 3 then
         new_move t game_state
       else game_state.words_found <- h :: game_state.words_found;
-      game_state.score <- update_score game_state.score found;
+      game_state.score <- update_score game_state.words_found;
       new_move t game_state
 
 let rec get_valid_words (word_list : string list) =

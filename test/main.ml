@@ -101,7 +101,6 @@ let two_point = W2.update_game_state "abcd" one_point
 
 let wordbite_test =
   [
-    test "initalized game time" init_game_state.time_elapsed 0.0;
     test "initalized game score" init_game_state.score 0;
     test "initalized words found" init_game_state.words_found [];
     test "move tile on board"
