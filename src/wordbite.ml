@@ -60,7 +60,7 @@ let rec get_list_pos (t_list : t list) =
 let check_avail (t : t) (new_space : int * int) (pos_list : (int * int) list) =
   if
     List.mem new_space pos_list
-    || List.mem (adjacent t t.position) pos_list
+    || List.mem (adjacent t new_space) pos_list
     || fst new_space > max_x t
     || snd new_space > max_y t
   then false

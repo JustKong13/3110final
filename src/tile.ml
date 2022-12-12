@@ -59,9 +59,20 @@ let string_pos (t : t) =
   match t.position with
   | x, y -> "(" ^ string_of_int x ^ " , " ^ string_of_int y ^ ")"
 
+let type_to_align (t : t) =
+  match t.ttype with
+  | ATile -> "1 x 1"
+  | HTile -> "2 x 1"
+  | VTile -> "1 x 2"
+
+let letter_helper (t : t) =
+  match t.ttype with
+  | ATile -> t.tstring ^ " "
+  | _ -> t.tstring
+
 let tile_string (t : t) =
-  "[ TILE INFO: " ^ "string: " ^ t.tstring ^ " | type: " ^ string_type t
-  ^ " | position : " ^ string_pos t ^ "]"
+  "string: " ^ letter_helper t ^ " | type: " ^ type_to_align t ^ " | pos: "
+  ^ string_pos t ^ "]"
 
 let rec lst_string (lst : t list) =
   match lst with
@@ -107,6 +118,12 @@ let adjacent (t : t) (pair : int * int) =
   else if t.ttype = HTile then (1 + get_x pair, get_y pair)
   else (get_x pair, 1 + get_y pair)
 
+let full_neighbors (x, y) (full : (int * int) list) =
+  (x > 0 && List.mem (x - 1, y) full)
+  || (x < 7 && List.mem (x + 1, y) full)
+  || (y > 0 && List.mem (x, y - 1) full)
+  || (y < 8 && List.mem (x, y + 1) full)
+
 let get_full pair =
   match pair with
   | _, f -> f
@@ -119,8 +136,12 @@ let rec place (t_lst : t list) (full : (int * int) list) =
   let rec place_aux (t, full) =
     let x = Random.int (max_x t + 1) in
     let y = Random.int (max_y t) + 1 in
-    if List.mem (x, y) full || List.mem (adjacent t (x, y)) full then
-      place_aux (t, full)
+    if
+      List.mem (x, y) full
+      || List.mem (adjacent t (x, y)) full
+      || full_neighbors (x, y) full
+      || full_neighbors (adjacent t (x, y)) full
+    then place_aux (t, full)
     else (new_coords t (x, y), (x, y) :: adjacent t (x, y) :: full)
   in
   match t_lst with

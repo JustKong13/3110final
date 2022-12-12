@@ -150,26 +150,8 @@ let double_vowels = "aabcdeefghiijklmnoopqrstuuvwxyz"
 
   let tile_tests = [ create_test "create tiles" str_list [] ]*)
 
-open Tile
-
-let list_of_tiles =
-  [
-    { tstring = "asdf"; ttype = ATile; position = (0, 0) };
-    { tstring = "s"; ttype = HTile; position = (10, 10) };
-  ]
-
-let tile_tests =
-  [
-    test "finding tile loc"
-      (find_tile (0, 0) list_of_tiles)
-      { tstring = "asdf"; ttype = ATile; position = (0, 0) };
-    test "finding tile loc"
-      (find_tile (10, 10) list_of_tiles)
-      { tstring = "s"; ttype = HTile; position = (10, 10) };
-  ]
-
 let tests =
   "wordbite test suite"
-  >::: List.flatten [ word_validator_tests; wordbite_test; tile_tests ]
+  >::: List.flatten [ word_validator_tests; wordbite_test ]
 
 let _ = run_test_tt_main tests
