@@ -19,9 +19,9 @@ let game_state =
 
 let rec start_game input =
   ANSITerminal.print_string [ ANSITerminal.cyan ]
-    ("\n\nWords Found: \n╒════════════════╕\n\n"
+    ("\n\nWords Found: \n╒════════════════╕\n"
     ^ get_words_found game_state.words_found
-    ^ "\n" ^ "\n\n╚════════════════╝");
+    ^ "\n╚════════════════╝");
   ANSITerminal.print_string [ ANSITerminal.cyan ]
     ("\n\nCurrent Score: " ^ string_of_int game_state.score);
   ANSITerminal.print_string [ ANSITerminal.cyan ] "\n\nCurrent Board:\n";
@@ -45,7 +45,7 @@ and parse_input input =
 and get_words_found (words_found : string list) =
   match words_found with
   | [] -> ""
-  | h :: t -> h ^ "\n " ^ get_words_found t
+  | h :: t -> h ^ "\n" ^ get_words_found t
 
 and parse_coord s =
   try
