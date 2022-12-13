@@ -16,14 +16,34 @@ let get_board_coords (x, y) =
    graphical coordinates of [get_board_cords (x', y')]. *)
 let get_grid_coords (x, y) = ((x * 60) + 60, 540 - (y * 60))
 
+let draw_error_msg s () =
+  set_font "-*-fixed-medium-r-semicondensed--14-*-*-*-*-*-iso8859-1";
+  moveto 60 630;
+  set_color red;
+  match s with
+  | "empty tile" ->
+      draw_string
+        "You initally selected an empty tile. Please select another tile."
+  | "out of bounds" ->
+      draw_string
+        "CANNOT move to this tile due to being out of bounds. Choose new place \
+         to move to."
+  | "tile overlap" ->
+      moveto 60 645;
+      draw_string
+        "CANNOT move to this tile due to overlap. Choose new place to move to."
+  | _ -> draw_string "impossible error?!"
+
 let draw_none_selection () =
+  set_color black;
   set_font "-*-fixed-medium-r-semicondensed--13-*-*-*-*-*-iso8859-1";
-  moveto ((3 * size_x () / 4) - 10) (size_y () - 150);
+  moveto ((3 * size_x () / 4) - 15) (size_y () - 150);
   draw_string "Current tile selected: NONE"
 
 let draw_selected_tile (x, y) () =
+  set_color black;
   set_font "-*-fixed-medium-r-semicondensed--13-*-*-*-*-*-iso8859-1";
-  moveto ((3 * size_x () / 4) - 10) (size_y () - 150);
+  moveto ((3 * size_x () / 4) - 15) (size_y () - 150);
   let board_coords = get_board_coords (x, y) in
   if
     fst board_coords >= 0
@@ -44,6 +64,7 @@ let draw_single_letter c (x, y) =
   draw_char c
 
 let draw_all_letters (g : Wordbite.game) () =
+  set_color black;
   set_font "-*-fixed-medium-r-semicondensed--50-*-*-*-*-*-iso8859-1";
   let b = g.board in
   for lst = 0 to 8 do
@@ -57,18 +78,20 @@ let draw_all_letters (g : Wordbite.game) () =
   done
 
 let draw_score (g : Wordbite.game) () =
+  set_color black;
   set_font "-*-fixed-medium-r-semicondensed--20-*-*-*-*-*-iso8859-1";
-  moveto ((3 * size_x () / 4) - 10) (size_y () - 200);
+  moveto ((3 * size_x () / 4) - 15) (size_y () - 200);
   draw_string ("Current Score: " ^ string_of_int g.score)
 
 let draw_words_found (g : Wordbite.game) () =
   set_color black;
   set_font "-*-fixed-medium-r-semicondensed--30-*-*-*-*-*-iso8859-1";
-  moveto ((3 * size_x () / 4) - 10) (size_y () - 250);
+  moveto ((3 * size_x () / 4) - 15) (size_y () - 275);
   draw_string "Words Found";
   set_font "-*-fixed-medium-r-semicondensed--25-*-*-*-*-*-iso8859-1";
   for v = 1 to List.length g.words_found do
-    moveto ((3 * size_x () / 4) - 10) (size_y () - 280 - (v * 25));
+    set_color (rgb 0 127 255);
+    moveto ((3 * size_x () / 4) - 15) (size_y () - 280 - (v * 25));
     draw_string (List.nth g.words_found (v - 1))
   done
 
@@ -92,43 +115,60 @@ let draw_game (g : Wordbite.game) () =
   draw_score g ();
   draw_all_letters g ()
 
+let draw_back_to_mm text_dim () =
+  let back_dim = text_size "Back to Main Menu" in
+  moveto ((size_x () / 2) - (fst back_dim / 2)) (size_y () - 575 - snd text_dim);
+  draw_string "Back to Main Menu";
+  set_line_width 2;
+  draw_rect
+    ((size_x () / 2) - (fst back_dim / 2) - 5)
+    (size_y () - 575 - snd back_dim - 5)
+    (fst back_dim + 10)
+    (snd back_dim + 10);
+  let back_l = (size_x () / 2) - (fst back_dim / 2) in
+  let back_r = (size_x () / 2) + (fst back_dim / 2) in
+  let back_t = size_y () - 575 - snd text_dim + snd back_dim in
+  let back_b = size_y () - 575 - snd text_dim in
+  (back_l, back_r, back_t, back_b)
+
 let draw_instructions () =
   set_font "-*-fixed-medium-r-semicondensed--50-*-*-*-*-*-iso8859-1";
   let instr_dim = text_size "Instructions" in
-  moveto ((size_x () / 2) - (fst instr_dim / 2)) (size_y () - 125);
+  moveto ((size_x () / 2) - (fst instr_dim / 2)) (size_y () - 120);
   draw_string "Instructions";
   set_font "-*-fixed-medium-r-semicondensed--25-*-*-*-*-*-iso8859-1";
-  moveto (size_x () / 10) (size_y () - 180);
+  moveto (size_x () / 12) (size_y () - 180);
   set_color (rgb 0 171 65);
   let text_dim = text_size "Objective: " in
   draw_string "Objective: ";
   set_color black;
   draw_string "Create as many words as you can by moving";
-  moveto ((size_x () / 10) + fst text_dim) (size_y () - 180 - snd text_dim);
+  moveto ((size_x () / 12) + fst text_dim) (size_y () - 180 - snd text_dim);
   draw_string "tiles around.";
   set_color (rgb 179 139 109);
-  moveto (size_x () / 10) (size_y () - 230 - snd text_dim);
+  moveto (size_x () / 12) (size_y () - 230 - snd text_dim);
   draw_string "Good Things to Know";
   set_color black;
   let arrow_dim = text_size "-> " in
-  moveto (size_x () / 10) (size_y () - 260 - snd text_dim);
+  moveto (size_x () / 12) (size_y () - 260 - snd text_dim);
   draw_string "-> Letters may be a (1 x 1) tile or a tile pair aligned";
-  moveto ((size_x () / 10) + fst arrow_dim) (size_y () - 285 - snd text_dim);
+  moveto ((size_x () / 12) + fst arrow_dim) (size_y () - 285 - snd text_dim);
   draw_string "vertically (2 x 1) or horizontally (1 x 2).";
-  moveto (size_x () / 10) (size_y () - 325 - snd text_dim);
+  moveto (size_x () / 12) (size_y () - 325 - snd text_dim);
   draw_string "-> You may only move tiles to empty spaces on the board.";
-  moveto ((size_x () / 10) + fst arrow_dim) (size_y () - 350 - snd text_dim);
+  moveto ((size_x () / 12) + fst arrow_dim) (size_y () - 350 - snd text_dim);
   draw_string "They CANNOT go out of bounds.";
   set_color red;
-  moveto (size_x () / 10) (size_y () - 400 - snd text_dim);
+  moveto (size_x () / 12) (size_y () - 400 - snd text_dim);
   draw_string "The Controls";
   set_color black;
-  moveto (size_x () / 10) (size_y () - 430 - snd text_dim);
+  moveto (size_x () / 12) (size_y () - 430 - snd text_dim);
   draw_string "Mouse Click - select a tile with a letter to move around";
-  moveto (size_x () / 10) (size_y () - 460 - snd text_dim);
+  moveto (size_x () / 12) (size_y () - 460 - snd text_dim);
   draw_string "Spacebar - place selected tile into valid empty tiles";
-  moveto (size_x () / 10) (size_y () - 490 - snd text_dim);
-  draw_string "Escape Key - deselect tile to select a new tile"
+  moveto (size_x () / 12) (size_y () - 490 - snd text_dim);
+  draw_string "Escape Key - deselect tile to select a new tile";
+  draw_back_to_mm text_dim ()
 
 let draw_title_screen () =
   set_font "-*-fixed-medium-r-semicondensed--75-*-*-*-*-*-iso8859-1";
@@ -173,5 +213,4 @@ let draw_title_screen () =
 let create_window =
   open_graph "";
   resize_window 800 700;
-  set_window_title "Wordbite";
-  draw_title_screen
+  set_window_title "Wordbite"
