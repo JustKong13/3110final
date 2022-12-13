@@ -287,9 +287,11 @@ let word_finder_test =
     test "finds word in column"
       (check_for_words (1, 1) game_state_board1)
       [ "ban" ];
-    test "finds word in row "
+    test "finds word in row"
       (check_for_words (7, 3) game_state_board1)
       [ "not" ];
+    test_exception "moving a nonexistant tile" TileNotFound (fun _ ->
+        move_on_board (0, 0) (1, 1) B.empty);
   ]
 
 let tests =
