@@ -1,15 +1,35 @@
+# Installation Instructions
+
+## Build/Run
 To build the project, type in terminal of directory folder
+```
+make build
+```
 
-- `dune build`
+To run the project in terminal:
+```
+make playterminal
+```
 
-Packages we are using: 
+To run the project with OCaml graphics:
+```
+make playgui
+```
 
-- `ounit2`: This was used extensively throughout 3110, so it should be installed
+## Packages to Install
+Install OCaml with all the default packages with this guide
+
+https://cs3110.github.io/textbook/chapters/preface/install.html
+
+Additional packages that have to be installed
+```
+opam install ANSITerminal
+opam install graphics
+```
+
+
+Packages we are using:
+- `ounit2`: This testing tool was used extensively throughout CS3110, so it should be installed
 - `str`: Comes apart of the OCaml basic library
-- `ANSITerminal`: Terminal that we will be using for the demo of the project. This was a package already installed for A2.
-
-    - `opam install ANSITerminal`
-
-To start the game in terminal: 
-    
-- `make play`
+- `ANSITerminal`: Addition terminal commands that we will use for the text-based version of the project
+- `graphics`: Used to display graphics in a window and allows user interaction with the game

@@ -3,11 +3,6 @@ build:
 	dune build bin
 	dune build test
 
-code:
-	-dune build
-	code .
-	! dune build --watch
-
 utop:
 	OCAMLRUNPARAM=b dune utop src
 
@@ -19,9 +14,14 @@ playgui:
 
 playterminal:
 	OCAMLRUNPARAM=b dune exec bin/main_terminal.exe
+
+zip:
+	dune clean
+	zip -r wordbites.zip . -x@exclude.lst
 	
 clean:
 	dune clean
+	rm -f wordbites.zip
 
 doc:
 	dune build @doc
