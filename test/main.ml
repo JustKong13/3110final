@@ -201,6 +201,31 @@ let tile_tests =
 let find_words_of_row (lst : string list) =
   lst |> create_string_of_row |> generate_list_of_words |> get_valid_words
 
+let board1 =
+  [
+    [ "-"; "-"; "-"; "-"; "-"; "-"; "-"; "-" ];
+    [ "-"; "b"; "-"; "-"; "-"; "-"; "-"; "-" ];
+    [ "-"; "a"; "-"; "-"; "-"; "-"; "-"; "-" ];
+    [ "-"; "n"; "o"; "t"; "-"; "-"; "-"; "-" ];
+    [ "-"; "-"; "-"; "-"; "-"; "-"; "-"; "-" ];
+    [ "-"; "-"; "-"; "-"; "-"; "-"; "-"; "-" ];
+    [ "-"; "-"; "-"; "-"; "-"; "-"; "-"; "-" ];
+    [ "-"; "-"; "-"; "-"; "-"; "-"; "-"; "-" ];
+    [ "-"; "-"; "-"; "-"; "-"; "-"; "-"; "-" ];
+  ]
+
+let board1_rep =
+  B.empty
+  |> B.place_letter "b" (1, 1)
+  |> B.place_letter "a" (1, 2)
+  |> B.place_letter "n" (1, 3)
+  |> B.place_letter "o" (2, 3)
+  |> B.place_letter "t" (3, 3)
+
+(** to test game board word search function*)
+let game_state_board1 : game =
+  { score = 0; words_found = []; board = board1_rep; tile_list = [] }
+
 let word_finder_test =
   [
     test "find word banana"
@@ -212,6 +237,24 @@ let word_finder_test =
     test "does not find invalid word in row"
       (find_words_of_row [ "b"; "a"; "s" ])
       [];
+    test "finds valid word and omits invalid word 1"
+      (find_words_of_row [ "y"; "e"; "s"; "-"; "c"; "b"; "t" ])
+      [ "yes" ];
+    test "finds valid word and omits invalid word 2"
+      (find_words_of_row [ "c"; "b"; "t"; "-"; "y"; "e"; "s" ])
+      [ "yes" ];
+    test "does not find word thats attached to extraneous letters"
+      (find_words_of_row [ "c"; "y"; "e"; "s" ])
+      [];
+    test "finds word in row and column"
+      (check_for_words (1, 3) game_state_board1)
+      [ "not"; "ban" ];
+    test "finds word in column"
+      (check_for_words (1, 1) game_state_board1)
+      [ "ban" ];
+    test "finds word in row "
+      (check_for_words (7, 3) game_state_board1)
+      [ "not" ];
   ]
 
 let tests =
