@@ -156,7 +156,7 @@ let get_string_of_board (game_board : string list list) =
   ^ "___________________________________\n"
 
 (** [update_game_state] updates the game state on successful completion of a
-    word on the board - this method is here for testing purposes only*)
+    word on the board*)
 let update_game_state (word : string) (game_state : game) =
   if List.mem word game_state.words_found then game_state
   else
