@@ -2,6 +2,21 @@
     [dune.exec ./test/main.exe (mac) dune exec test/main.exe (other)] IN THE
     TERMINAL*)
 
+(** Since our project was a game, that means that a lot of our actual testing
+    came through user testing, that is playing the game itself and finding any
+    potential bugs. However, that is difficult to test for in a test suite, so a
+    lot of our testing in this file was localized testing. We tested backend
+    functionality for or game by testing the helpers that we wrote, and we did
+    this by creating arbitrary game states which we can predict the behavior of.
+    Our game states are generated randomly, which is why we needed to create our
+    own game state. Also, since our game state was mutable, it was difficult to
+    test whether the functions that mutate game state were actually doing the
+    job without ruining other test cases. The way we got around this was by
+    writing complementary functions that returned the new game state rather than
+    mutate the game state. These functions were meant primarally to test
+    functionality, and were ultimately omitted from the actual game in favor of
+    functions that mutated game state. *)
+
 open OUnit2
 open Game
 open Wordvalidator
@@ -158,7 +173,7 @@ let tile_tests =
     test "finding adjacent tile of VTile"
       (find_tile (5, 6) list_of_tiles)
       ({ tstring = "sa"; ttype = VTile; position = (5, 5) }, false);
-    test_exception "finding adjacent tile of HTile" (Failure "Tile not found")
+    test_exception "finding adjacent tile of HTile" Game.Wordbite.TileNotFound
       (fun _ -> find_tile (7, 8) list_of_tiles);
     test "testing move 1"
       (move (0, 0) (2, 2) list_of_tiles)
@@ -167,12 +182,10 @@ let tile_tests =
         { tstring = "sa"; ttype = HTile; position = (7, 7) };
         { tstring = "sa"; ttype = VTile; position = (5, 5) };
       ];
-    test_exception "moving to overlap"
-      (Failure "Cannot move this tile due to overlapping.") (fun _ ->
+    test_exception "moving to overlap" Game.Wordbite.TileOverlap (fun _ ->
         move (0, 0) (7, 7) list_of_tiles);
-    test_exception "moving to overlap adjacent"
-      (Failure "Cannot move this tile due to overlapping.") (fun _ ->
-        move (0, 0) (8, 7) list_of_tiles);
+    test_exception "moving to overlap adjacent" Game.Wordbite.TileOverlap
+      (fun _ -> move (0, 0) (8, 7) list_of_tiles);
     test "moving next to a tile valid"
       (move (0, 0) (7, 8) list_of_tiles)
       [
@@ -181,12 +194,29 @@ let tile_tests =
         { tstring = "sa"; ttype = VTile; position = (5, 5) };
       ];
     test_exception "moving and then checking location of the original position"
-      (Failure "Tile not found") (fun _ ->
+      Game.Wordbite.TileNotFound (fun _ ->
         find_tile (0, 0) (move (0, 0) (2, 2) list_of_tiles));
+  ]
+
+let find_words_of_row (lst : string list) =
+  lst |> create_string_of_row |> generate_list_of_words |> get_valid_words
+
+let word_finder_test =
+  [
+    test "find word banana"
+      (find_words_of_row [ "-"; "b"; "a"; "n"; "a"; "n"; "a"; "-" ])
+      [ "banana" ];
+    test "find word but and and"
+      (find_words_of_row [ "-"; "a"; "n"; "d"; "-"; "b"; "u"; "t" ])
+      [ "and"; "but" ];
+    test "does not find invalid word in row"
+      (find_words_of_row [ "b"; "a"; "s" ])
+      [];
   ]
 
 let tests =
   "wordbite test suite"
-  >::: List.flatten [ word_validator_tests; wordbite_test; tile_tests ]
+  >::: List.flatten
+         [ word_validator_tests; wordbite_test; tile_tests; word_finder_test ]
 
 let _ = run_test_tt_main tests

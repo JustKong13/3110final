@@ -7,7 +7,7 @@ utop:
 	OCAMLRUNPARAM=b dune utop src
 
 test:
-	OCAMLRUNPARAM=b dune exec test/main.exe
+	dune exec test/main.exe
 
 playgui:
 	OCAMLRUNPARAM=b dune exec gui/main_gui.exe
