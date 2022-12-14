@@ -2,18 +2,11 @@ open Graphics
 open Game
 open Board
 
-(* [get_board_coords (x, y)] converts graphical representation coordinates to
-   board coordinates. Graphical coordinates range from (60-120, 540-600) to
-   (480-540, 540-600) down to (60-120, 60-120) to (480-540, 60-120) with respect
-   to board coordinates ranging from (0, 0) to (7, 0) down to (0, 8) to (7, 8).
-   Graphical y converts to board x and graphical x converts to board y. *)
 let get_board_coords (x, y) =
   if x >= 60 && y >= 60 && x <= 540 && y <= 600 then
     ((x - 60) / 60, (600 - y) / 60)
   else (-1, -1)
 
-(* [get_grid_coords (x, y)] is the opposite conversion from board coordinates to
-   graphical coordinates of [get_board_cords (x', y')]. *)
 let get_grid_coords (x, y) = ((x * 60) + 60, 540 - (y * 60))
 
 let draw_error_msg s () =
@@ -107,6 +100,15 @@ let draw_gridlines () =
   for v = 0 to 9 do
     lineto (current_x () + 480) (current_y ());
     moveto 60 (current_y () + 60)
+  done;
+  set_font "-*-fixed-medium-r-semicondensed--25-*-*-*-*-*-iso8859-1";
+  for v = 0 to 7 do
+    moveto ((60 * v) + 85) 15;
+    draw_string (string_of_int v)
+  done;
+  for v = 0 to 8 do
+    moveto 25 (560 - (60 * v));
+    draw_string (string_of_int v)
   done
 
 let draw_game (g : Wordbite.game) () =

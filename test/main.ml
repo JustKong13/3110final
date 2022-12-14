@@ -1,21 +1,29 @@
-(** IN ORDER TO RUN TESTS, YOU MUST DO
-    [dune.exec ./test/main.exe (mac) dune exec test/main.exe (other)] IN THE
-    TERMINAL*)
-
-(** TESINNG PLAN: Since our project was a game, that means that a lot of our
+(** TESTING PLAN: Since our project was a game, that means that a lot of our
     actual testing came through user testing. However, that is difficult to test
     for in a test suite, so a lot of our testing in this file was localized
-    testing (i.e. testing backend functions). We tested backend functionality
-    for or game by testing the helpers that we wrote, and we did this by
-    creating arbitrary game states which we can predict the behavior of. Our
-    game states are generated randomly, which is why we needed to create our own
-    game state. Also, since our game state was mutable, it was difficult to test
-    whether the functions that mutate game state were actually doing the job
-    without ruining other test cases. The way we got around this was by writing
-    complementary functions that returned the new game state rather than mutate
-    the game state. These functions were meant primarally to test functionality,
-    and were ultimately omitted from the actual game in favor of functions that
-    mutated game state. *)
+    testing (i.e. testing backend functions). We manually tested the gui portion
+    of the project by opening the graphics window every time and testing whether
+    the components are drawn correctly or in their correct coordinates. In
+    addition, there was user input in the GUI, so we had to test if the user
+    input actually had a response by drawing a string which is similar to
+    debugging by printing statements. We tested backend functionality for or
+    game by testing the helpers that we wrote in our modules, and we did this by
+    creating arbitrary game states which we can predict the behavior of. Most of
+    the test cases are developed with black box testing since most of our helper
+    functions involve randomized game states. Thus, we tested the Board, Tile,
+    Wordvalidator, and Wordbite modules with mutable game states and made
+    changes to the game state through manipulation and mutability in order to
+    test our project. Our game states are generated randomly, which is why we
+    needed to create our own game state. Also, since our game state was mutable,
+    it was difficult to test whether the functions that mutate game state were
+    actually doing the job without ruining other test cases. The way we got
+    around this was by writing complementary functions that returned the new
+    game state rather than mutate the game state. These functions were meant
+    primarally to test functionality, and were ultimately omitted from the
+    actual game in favor of functions that mutated game state. Through thorough
+    testing of the GUI and backend functions, we are able to pass all the tests
+    and our game system works as intended with the specificatins of the modules
+    and our intended idea and purpose for this game.*)
 
 open OUnit2
 open Game
