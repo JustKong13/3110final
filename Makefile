@@ -1,3 +1,5 @@
+.PHONY: test
+
 build:
 	dune build src
 	dune build bin
@@ -7,7 +9,7 @@ utop:
 	OCAMLRUNPARAM=b dune utop src
 
 test:
-	dune exec test/main.exe
+	OCAMLRUNPARAM=b dune exec test/main.exe
 
 playgui:
 	OCAMLRUNPARAM=b dune exec gui/main_gui.exe
