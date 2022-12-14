@@ -16,6 +16,11 @@ To run the project with OCaml graphics:
 make playgui
 ```
 
+To run the gui, you might have to run
+```
+dune build
+```
+
 ## Packages to Install
 Install OCaml with all the default packages with this guide
 

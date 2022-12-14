@@ -64,6 +64,8 @@ let b1 = B.empty
    basic functionality with creating boards*)
 let word_validator_tests =
   [
+    test "huy is the best and has been added to our dictionary"
+      (check_word "huy") true;
     test "banana is a real word" (check_word "banana") true;
     test "frog is a real word" (check_word "frog") true;
     test "asdf is not a real word" (check_word "asdf") false;
