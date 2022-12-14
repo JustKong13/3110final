@@ -130,7 +130,7 @@ let move (start_pos : int * int) (end_pos : int * int) (t_list : t list) =
     raise OutOfBound
   else move_aux t_list
 
-let move_on_board ((x1, y1) : B.coord) ((x2, y2) : B.coord)
+let move_on_board ((x1, y1) : int * int) ((x2, y2) : int * int)
     (board : B.letter list list) =
   if B.is_empty (x1, y1) board then raise TileNotFound
   else if B.is_empty (x2, y2) board then
@@ -156,7 +156,7 @@ let get_string_of_board (game_board : string list list) =
   ^ "___________________________________\n"
 
 (** [update_game_state] updates the game state on successful completion of a
-    word on the board*)
+    word on the board - this method is here for testing purposes only*)
 let update_game_state (word : string) (game_state : game) =
   if List.mem word game_state.words_found then game_state
   else
