@@ -147,6 +147,12 @@ let wordbite_test =
     test "transforming empty row to string"
       (create_string_of_row [ "-"; "-"; "-"; "-"; "-"; "-"; "-"; "-" ])
       "--------";
+    test "updating the score given list of empty found words" (update_score [])
+      0;
+    test "update score given list of words" (update_score [ "laugh" ]) 800;
+    test "update score given long list of words"
+      (update_score [ "laugh"; "tongue"; "top" ])
+      2300;
   ]
 
 let double_vowels = "aabcdeefghiijklmnoopqrstuuvwxyz"
@@ -186,6 +192,16 @@ let list_of_tiles1_board =
     [ "-"; "-"; "i"; "-"; "-"; "-"; "-"; "-" ];
     [ "c"; "-"; "-"; "g"; "-"; "-"; "a"; "o" ];
   ]
+
+let game_state1 =
+  {
+    score = 0;
+    words_found = [];
+    board = generate_game_board tile_list_1 B.empty;
+    tile_list = tile_list_1;
+  }
+
+(* function to test whether we can find all the words in a given board*)
 
 let tile_tests =
   [
@@ -243,6 +259,18 @@ let tile_tests =
     test "generate correct board given tile list randomized"
       (B.board_to_list (generate_game_board tile_list_1 B.empty))
       list_of_tiles1_board;
+    test_exception "moving ATile out of bounds" Game.Wordbite.OutOfBound
+      (fun _ -> move (0, 0) (9, 9) list_of_tiles);
+    test_exception "moving HTile out of bounds" Game.Wordbite.OutOfBound
+      (fun _ -> move (6, 7) (8, 8) list_of_tiles);
+    test_exception "moving VTile out of bounds" Game.Wordbite.OutOfBound
+      (fun _ -> move (5, 5) (5, 8) list_of_tiles);
+    test "checking board for no valid words 1"
+      (check_for_words (0, 0) game_state1)
+      [];
+    test "checking board for no valid words 1"
+      (check_for_words (7, 2) game_state1)
+      [];
   ]
 
 let find_words_of_row (lst : string list) =
