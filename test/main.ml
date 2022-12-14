@@ -201,7 +201,36 @@ let game_state1 =
     tile_list = tile_list_1;
   }
 
-(* function to test whether we can find all the words in a given board*)
+let list_of_tiles2_board =
+  [
+    [ "-"; "-"; "-"; "-"; "-"; "-"; "-"; "-" ];
+    [ "-"; "-"; "-"; "-"; "-"; "-"; "-"; "-" ];
+    [ "c"; "a"; "n"; "t"; "-"; "y"; "e"; "s" ];
+    [ "-"; "-"; "-"; "-"; "t"; "-"; "-"; "-" ];
+    [ "-"; "-"; "-"; "-"; "o"; "-"; "-"; "-" ];
+    [ "-"; "-"; "-"; "-"; "n"; "-"; "-"; "-" ];
+    [ "-"; "-"; "-"; "-"; "-"; "-"; "-"; "-" ];
+    [ "-"; "-"; "-"; "-"; "-"; "-"; "-"; "-" ];
+    [ "-"; "-"; "-"; "-"; "-"; "-"; "-"; "-" ];
+  ]
+
+let tile_list_2 =
+  [
+    { tstring = "ca"; ttype = HTile; position = (0, 2) };
+    { tstring = "nt"; ttype = HTile; position = (2, 2) };
+    { tstring = "y"; ttype = ATile; position = (5, 2) };
+    { tstring = "es"; ttype = HTile; position = (6, 2) };
+    { tstring = "t"; ttype = ATile; position = (4, 3) };
+    { tstring = "on"; ttype = VTile; position = (4, 4) };
+  ]
+
+let game_state2 =
+  {
+    score = 0;
+    words_found = [];
+    tile_list = tile_list_2;
+    board = generate_game_board tile_list_2 B.empty;
+  }
 
 let tile_tests =
   [
