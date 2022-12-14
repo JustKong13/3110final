@@ -5,8 +5,12 @@
 
 open Tile
 open Board
+
 module T = Tile
+(** Tile module. See Tile*)
+
 module B = Board
+(** Board module. See Board*)
 
 exception TileNotFound
 (** Exception for an empty tile selection. *)
@@ -65,23 +69,25 @@ val check_for_words : int * int -> game -> string list
 (*Testing functions*)
 
 val update_game_state : string -> game -> game
-(** This method is here for testing purposes only*)
+(** Returns the game state given an original game state and a new word. If the
+    word has already been found, returns original game state. *)
 
 val update_score : string list -> int
-(** This method is here for testing purposes only*)
+(** Returns a score given a list of found words*)
 
 val move_on_board :
   int * int -> int * int -> letter list list -> letter list list
-(** This method is here for testing purposes only*)
+(** Moves a letter from one tile to another tile*)
 
 val create_string_of_row : string list -> string
-(** This method is here for testing purposes only*)
+(** Takes a row in the board and parses out words. Returns a list of words.*)
 
 val find_tile : int * int -> T.t list -> T.t * bool
-(** This method is here for testing purposes only*)
+(** Returns the tile at a given position.*)
 
 val get_valid_words : string list -> string list
-(** This method is here for testing purposes only*)
+(** Returns a list of valid words*)
 
 val generate_list_of_words : string -> string list
-(** This method is here for testing purposes only*)
+(** Takes a string that represents a row or column of the board, and returns a
+    list of words to be validated. *)

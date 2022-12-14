@@ -27,9 +27,8 @@ clean:
 
 doc:
 	dune build @doc
-
-opendoc: doc
 	@bash opendoc.sh
+
 
 loc : 
 	dune clean
