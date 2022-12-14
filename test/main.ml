@@ -300,8 +300,12 @@ let tile_tests =
       (fun _ -> move (0, 0) (9, 9) list_of_tiles);
     test_exception "moving HTile out of bounds" Game.Wordbite.OutOfBound
       (fun _ -> move (6, 7) (8, 8) list_of_tiles);
+    test_exception "moving HTile out of bounds other tile"
+      Game.Wordbite.OutOfBound (fun _ -> move (7, 7) (0, 1) list_of_tiles);
     test_exception "moving VTile out of bounds" Game.Wordbite.OutOfBound
       (fun _ -> move (5, 5) (5, 8) list_of_tiles);
+    test_exception "moving VTile out of bounds other tile"
+      Game.Wordbite.OutOfBound (fun _ -> move (5, 6) (5, 0) list_of_tiles);
     test "checking board for no valid words 1"
       (check_for_words (0, 0) game_state1)
       [];

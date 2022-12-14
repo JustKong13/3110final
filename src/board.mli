@@ -1,8 +1,12 @@
+(** Interface for the board module
+
+    This module creates a representation for the board. *)
+
+(** [letter] represents a tile component, so either a 1 x 1 tile itself, or part
+    of a 1 x 2 or 2 x 1 tile. *)
 type letter =
   | None
   | Some of string
-      (** [letter] represents a tile component, so either a 1 x 1 tile itself,
-          or part of a 1 x 2 or 2 x 1 tile. *)
 
 type t = letter list list
 (** Type t represents a board, which is a 8 x 9 2D array of either tile

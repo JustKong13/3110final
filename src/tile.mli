@@ -1,9 +1,13 @@
+(** Interface for tile module
+
+    This module involves the operations and creation of tiles used in the board. *)
+
+(** ATile are types of tiles that are 1x1. HTiles are types of tiles that are
+    1x2 (horizontal). VTiles are types of tiles that are 2x1 (vertical). *)
 type tile_type =
   | ATile
   | HTile
   | VTile
-(* ATile are types of tiles that are 1x1. HTiles are types of tiles that are 1x2
-   (horizontal). VTiles are types of tiles that are 2x1 (vertical). *)
 
 type t = {
   tstring : string;
@@ -16,23 +20,23 @@ type t = {
     represents its position on the y-axis.*)
 
 val tile_list : t list
-(* [tile_list] is a list of tiles with random, valid positions that don't
-   overlap.*)
+(** [tile_list] is a list of tiles with random, valid positions that don't
+    overlap.*)
 
 val lst_string : t list -> string
-(* [lst_string t_list] is the string representation of a list of tiles, which
-   gives information regarding their string contents, thier alignment, and their
-   position. *)
+(** [lst_string t_list] is the string representation of a list of tiles, which
+    gives information regarding their string contents, thier alignment, and
+    their position. *)
 
 val adjacent : t -> int * int -> int * int
-(* [adjacent t] gets the adjacent component that makes up a (1 x 2) or (2 x 1)
-   tile t*)
+(** [adjacent t] gets the adjacent component that makes up a (1 x 2) or (2 x 1)
+    tile t*)
 
 val new_coords : t -> int * int -> t
-(* [adjacent t (x , y)] changes tile t's position to (x , y). *)
+(** [adjacent t (x , y)] changes tile t's position to (x , y). *)
 
 val max_x : t -> int
-(* [max_x t ] returns the maximum x-coordinate that t can be placed. *)
+(** [max_x t ] returns the maximum x-coordinate that t can be placed. *)
 
 val max_y : t -> int
-(* [max_y t ] returns the maximum y-coordinate that t can be placed. *)
+(** [max_y t ] returns the maximum y-coordinate that t can be placed. *)
